@@ -73,7 +73,7 @@ export const generateContainer = () =>
         }
       )
     )
-    .pipe(gulp.dest(buildDir + '/META_INF'));
+    .pipe(gulp.dest(buildDir + '/META-INF'));
 
 export const pages = () =>
   gulp
@@ -176,6 +176,11 @@ export const audio = () =>
     .src('./src/audio/**/*.{mp3,wav}')
     .pipe(gulp.dest(`${contentDir}/audio/`));
 
+export const captions = () =>
+  gulp
+    .src('./src/captions/**/*.{vtt,xml}')
+    .pipe(gulp.dest(`${contentDir}/captions/`));
+
 export const assetList = () =>
   gulp
     .src([`${contentDir}/xhtml/*.xhtml`], { base: `${contentDir}` })
@@ -200,7 +205,9 @@ export const assetList = () =>
           'mp3',
           'wav',
           'mp4',
-          'webm'
+          'webm',
+          'vtt',
+          'xml'
         ]
       })
     )
@@ -231,6 +238,7 @@ export const assets = done => {
     fonts,
     video,
     audio,
+    captions,
     assetList,
     generatePackageFile
   )();
@@ -242,8 +250,9 @@ export const serve = done => {
   server.init({
     server: {
       baseDir: './reader/',
-      index: `./reader/index.html/?${kebabCase(settings.name)}`
-    }
+      index: 'index.html'
+    },
+    startPath: `index.html?epub=epub_content/${kebabCase(settings.name)}`
   });
   done();
 };
