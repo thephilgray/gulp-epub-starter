@@ -1,0 +1,19 @@
+extends ../templates/layout
+block content
+  section.base
+    h2 exercise your copyright in more ways
+    p Creative Commons licence can cover anything that copyright covers. Every licence says "You need to give me attribution. I created this, give me credit for the work I did." The basic choices are commercial use, or not. Can you make derivative works, versions, adaptations or not? And do you want me to have to share alike?
+    video#video1(role='button', aria-controls='video1', autoplay='', controls='')
+      source(src='../video/shared-culture.mp4', type='video/mp4')
+      source(src='../video/shared-culture.webm', type='video/webm')
+      track(src='../captions/cc-en.xml', srclang='en', kind='subtitles', label='English')
+      track(src='../captions/cc-fr.xml', srclang='fr', kind='subtitles', label='Français')
+      .errmsg
+        p Your Reading System does not support (this) video.
+        pre
+          code 
+  <video id="video1" autoplay="" role="button" aria-controls="video1" controls="">
+  <source src="../video/shared-culture.mp4" type="video/mp4"></source>
+  <source src="../video/shared-culture.webm" type="video/webm"></source>
+  <track src="../captions/cc-en.xml" srclang="en" kind="subtitles" label="English"></track><track src="../captions/cc-fr.xml" srclang="fr" kind="subtitles" label="Français"></track></video>             
+    p So if I take your stuff, do I have to offer it to the next person under the same terms? There's no requirement for you to do anything with your work other than what you want to do. You own the copyright to it. What we've done is given you the right to exercise your copyright in more ways, more simply.
