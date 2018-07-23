@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "init": "gulp init",
     "clean": "gulp clean",
-    "serve": "gulp serve"
+    "serve": "gulp serve",
+    "dev": "gulp dev"
   },
   "keywords": [],
   "author": "",

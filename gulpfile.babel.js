@@ -83,6 +83,9 @@ export const pages = () =>
     .pipe(ext_replace('.xhtml'))
     .pipe(gulp.dest(contentDir + '/xhtml'));
 
+export const watchPug = () =>
+  gulp.watch('./src/pages/**/*.pug', gulp.series(pages, reload));
+
 export const pageList = () =>
   gulp
     .src([`${contentDir}/xhtml/*.xhtml`])
@@ -124,6 +127,9 @@ export const css = () =>
     .pipe(postcss(postcssPlugins))
     .pipe(gulp.dest(contentDir));
 
+export const watchCss = () =>
+  gulp.watch('./src/css/**/*.scss', gulp.series(css, reload));
+
 export const images = () =>
   gulp
     .src(['./src/images/*'], { base: './src/' })
@@ -145,6 +151,9 @@ export const js = () =>
     .pipe(source('shared.js'))
     .pipe(gulp.dest(`${contentDir}/script/`))
     .pipe(buffer());
+
+export const watchJs = () =>
+  gulp.watch('./src/script/**/*.js', gulp.series(js, reload));
 
 // export const fonts = () =>
 //   gulp
@@ -240,7 +249,8 @@ export const assets = done => {
     audio,
     captions,
     assetList,
-    generatePackageFile
+    generatePackageFile,
+    reload
   )();
   done();
 };
@@ -257,6 +267,11 @@ export const serve = done => {
   done();
 };
 
+export const reload = done => {
+  server.reload();
+  done();
+};
+
 export const init = done => {
   gulp.series(
     clean,
@@ -268,5 +283,10 @@ export const init = done => {
     cover,
     assets
   )();
+  done();
+};
+
+export const dev = done => {
+  gulp.series(init, serve, gulp.parallel(watchPug, watchCss, watchJs))();
   done();
 };
