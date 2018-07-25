@@ -107,7 +107,7 @@ export const watchCss = () =>
 export const watchJs = () =>
   gulp.watch(
     ['./src/script/**/*.js', './src/script/**/*.vue'],
-    gulp.series(reload)
+    gulp.series(scripts, reload)
   );
 
 export const images = () =>

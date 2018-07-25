@@ -1,6 +1,7 @@
 import kebabCase from 'lodash/kebabCase';
 import Vue from 'vue';
 import App from './App.vue';
+import Widget from './Widget.vue';
 
 document.addEventListener('DOMContentLoaded', () => {
   if (document.querySelector('#app')) {
@@ -9,10 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
       render: h => h(App)
     });
   }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  console.log(kebabCase('hey!!!!!!!!! are you still working babel loader'));
+  if (document.querySelector('#widget')) {
+    new Vue({
+      el: '#widget',
+      render: h => h(Widget)
+    });
+  }
 });
 
 function checkReadingSystemSupport() {

@@ -7,7 +7,7 @@ export default {
   data () {
     return {
       msg: 'Hello world!',
-      count: 300
+      count: 400
     }
   }
 }
