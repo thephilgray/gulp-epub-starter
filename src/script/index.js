@@ -1,3 +1,20 @@
+import kebabCase from 'lodash/kebabCase';
+import Vue from 'vue';
+import App from './App.vue';
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.querySelector('#app')) {
+    new Vue({
+      el: '#app',
+      render: h => h(App)
+    });
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log(kebabCase('hey!!!!!!!!! are you still working babel loader'));
+});
+
 function checkReadingSystemSupport() {
   var neededFeatures = ['mouse-events', 'spine-scripting', 'dom-manipulation'];
   var support = typeof navigator.epubReadingSystem != 'undefined';
