@@ -18,7 +18,7 @@ export let config = {
     path: path.resolve(__dirname, `${contentDir}/script/`)
   },
   context: path.resolve(__dirname, `${contentDir}/script/`),
-  mode: 'development',
+  mode: process.env.NODE_ENV,
   target: 'web',
 
   module: {
