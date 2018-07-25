@@ -2,3 +2,5 @@ node_modules
 assetlist.json
 filelist.json
 reader/epub_content/
+*.epub
+*.errors

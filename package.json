@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=development gulp --require @babel/register --gulpfile tasks",
-    "build": "NODE_ENV=production gulp build --require @babel/register --gulpfile tasks"
+    "build": "NODE_ENV=production gulp build --require @babel/register --gulpfile tasks",
+    "publish": "NODE_ENV=production gulp publish --require @babel/register --gulpfile tasks",
+    "validate": "gulp validate --require @babel/register --gulpfile tasks"
   },
   "keywords": [],
   "author": "",
@@ -34,6 +36,7 @@
     "gulp-sass": "^4.0.1",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-useref": "^3.1.5",
+    "gulp-zip": "^4.1.0",
     "postcss-epub": "^3.0.1",
     "sass-loader": "^7.0.3",
     "vinyl-buffer": "^1.0.1",
