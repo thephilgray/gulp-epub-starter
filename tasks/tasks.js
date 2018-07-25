@@ -59,7 +59,7 @@ export const pageList = () =>
   gulp
     .src([`${contentDir}/xhtml/*.xhtml`])
     .pipe(filelist('filelist.json', { flatten: true, removeExtensions: true }))
-    .pipe(gulp.dest('../'));
+    .pipe(gulp.dest('.'));
 
 export const toc = () =>
   gulp
@@ -167,7 +167,7 @@ export const assetList = () =>
       })
     )
     .pipe(filelist('assetlist.json', { relative: true }))
-    .pipe(gulp.dest('../'));
+    .pipe(gulp.dest('.'));
 
 // map through the resulting assets list and use conditional logic to determine attrs
 // compute with a second function or perform in assetList task with gulp-if
