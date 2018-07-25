@@ -1,13 +1,12 @@
 <template>
-  <div class="example" @click="count++">{{ msg }} {{count + 1}}</div>
+  <div class="example" @click="$store.commit('increment')">{{ msg }} {{$store.state.count}}</div>
 </template>
 
 <script>
 export default {
   data () {
     return {
-      msg: 'Hello world!',
-      count: 400
+      msg: 'Hello world!'
     }
   }
 }

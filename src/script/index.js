@@ -1,18 +1,34 @@
 import kebabCase from 'lodash/kebabCase';
 import Vue from 'vue';
+import Vuex from 'vuex';
 import App from './App.vue';
 import Widget from './Widget.vue';
+
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment(state) {
+      state.count++;
+    }
+  }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   if (document.querySelector('#app')) {
     new Vue({
       el: '#app',
+      store,
       render: h => h(App)
     });
   }
   if (document.querySelector('#widget')) {
     new Vue({
       el: '#widget',
+      store,
       render: h => h(Widget)
     });
   }

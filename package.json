@@ -48,7 +48,8 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "lodash": "^4.17.10",
-    "vue": "^2.5.16"
+    "vue": "^2.5.16",
+    "vuex": "^3.0.1"
   },
   "babel": {
     "presets": [
