@@ -94,7 +94,7 @@ const postcssPlugins = [postcssEpub({ strict: true })];
 
 export const css = () =>
   gulp
-    .src(['./src/**/*.scss'], { base: './src/' })
+    .src(['./src/**/*.scss', '!src/**/modules/*.scss'], { base: './src/' })
     // .pipe(sourcemaps.init())
     .pipe(sass(sassOptions).on('error', sass.logError))
     // .pipe(sourcemaps.write())
@@ -190,22 +190,22 @@ export const generatePackageFile = () =>
     .pipe(gulp.dest(contentDir));
 
 export const assets = gulp.series(
+  pages,
   css,
   images,
   fonts,
   video,
   audio,
   captions,
-  scripts,
+  scripts
+);
+
+export const packageEpub = gulp.series(
   assetList,
+  pageList,
+  cover,
+  toc,
   generatePackageFile
 );
 
-export const init = gulp.series(
-  generateMimetype,
-  generateContainer,
-  pages,
-  pageList,
-  toc,
-  cover
-);
+export const init = gulp.series(generateMimetype, generateContainer);
