@@ -25,7 +25,7 @@ export const settings = {
   }
 };
 
-export const epubName = kebabCase(settings.name);
+export const epubName = kebabCase(settings.name) + '.epub';
 export const readerContentDir = path.resolve(
   __dirname,
   '../reader/epub_content/'
