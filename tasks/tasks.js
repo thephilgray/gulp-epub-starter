@@ -1,3 +1,5 @@
+import 'regenerator/runtime'
+import path from 'path';
 import gulp from 'gulp';
 import del from 'del';
 import mustache from 'gulp-mustache-plus';
@@ -6,11 +8,12 @@ import htmltidy from 'gulp-htmltidy';
 import ext_replace from 'gulp-ext-replace';
 import filelist from 'gulp-filelist';
 import sass from 'gulp-sass';
-// import sourcemaps from 'gulp-sourcemaps';
 import postcss from 'gulp-postcss';
 import postcssEpub from 'postcss-epub';
 import fileAssets from 'gulp-file-assets';
 import image from 'gulp-image';
+import data from 'gulp-data';
+
 
 import { scripts } from './scripts';
 import { reload } from './server';
@@ -20,7 +23,8 @@ import {
   readerContentDir,
   buildDir,
   contentDirname,
-  contentDir
+  contentDir,
+  exts
 } from './config';
 
 // full clean
@@ -44,16 +48,52 @@ export const generateContainer = () =>
     )
     .pipe(gulp.dest(buildDir + '/META-INF'));
 
-export const pages = () =>
-  gulp
+
+
+export const pages = () => {
+  let currentPageNumber = 1;
+  return gulp
     .src(['./src/pages/**/*.pug'], { base: './src/pages/' })
-    .pipe(pug({ doctype: 'xhtml' }))
+    .pipe(data((file) => ({ filename: path.basename(file.path).replace('.pug', ''), pageNumber: ++currentPageNumber })
+
+
+    ))
+    .pipe(pug({
+      doctype: 'xhtml',
+      locals: {}
+    }))
     .pipe(htmltidy({ doctype: 'xhtml', 'output-xhtml': 'yes' }))
     .pipe(ext_replace('.xhtml'))
     .pipe(gulp.dest(contentDir + '/xhtml'));
 
+}
+
+export const pagesSimple = () => {
+  let currentPageNumber = 1;
+  return gulp
+    .src(['./src/pages/**/*.pug'], { base: './src/pages/' })
+    .pipe(data((file) => ({ filename: path.basename(file.path).replace('.pug', ''), pageNumber: ++currentPageNumber })
+    ))
+    .pipe(pug({
+      doctype: 'xhtml',
+      locals: {}
+    }))
+    .pipe(htmltidy({ doctype: 'xhtml', 'output-xhtml': 'yes' }))
+    .pipe(gulp.dest(contentDir + '/xhtml'));
+
+}
+
+
+
+
 export const watchPug = () =>
-  gulp.watch('./src/pages/**/*.pug', gulp.series(pages, reload));
+  gulp.watch('./src/**/*.pug', gulp.series(pages, packageEpub, reload));
+
+
+export const watchPugSimple = () =>
+  gulp.watch('./src/**/*.pug', gulp.series(pagesSimple, reload));
+
+
 
 export const pageList = () =>
   gulp
@@ -87,18 +127,19 @@ export const cover = () =>
 
 const sassOptions = {
   errLogToConsole: true,
-  outputStyle: 'expanded'
+  outputStyle: 'expanded',
+  includePaths: ['node_modules/susy/sass']
 };
 
 const postcssPlugins = [postcssEpub({ strict: true })];
 
 export const css = () =>
   gulp
-    .src(['./src/**/*.scss', '!src/**/modules/*.scss'], { base: './src/' })
+    .src(['./src/css/styles.scss'], { base: './src/' })
     // .pipe(sourcemaps.init())
     .pipe(sass(sassOptions).on('error', sass.logError))
     // .pipe(sourcemaps.write())
-    .pipe(postcss(postcssPlugins))
+    // .pipe(postcss(postcssPlugins))
     .pipe(gulp.dest(contentDir));
 
 export const watchCss = () =>
@@ -113,12 +154,23 @@ export const watchJs = () =>
 export const images = () =>
   gulp
     .src(['./src/images/*'], { base: './src/' })
-    .pipe(image())
+    .pipe(image({
+      pngquant: false,
+      optipng: false,
+      zopflipng: false,
+      jpegRecompress: false,
+      mozjpeg: false,
+      guetzli: false,
+      gifsicle: false,
+      svgo: false,
+      concurrent: 10,
+      quiet: true // defaults to false
+    }))
     .pipe(gulp.dest(contentDir));
 
 export const fonts = () =>
   gulp
-    .src('./src/fonts/**/*.{ttf,otf}')
+    .src('./src/fonts/**/*.{ttf,otf,ttc}')
     .pipe(gulp.dest(`${contentDir}/fonts/`));
 
 export const video = () =>
@@ -142,28 +194,7 @@ export const assetList = () =>
     .pipe(
       fileAssets({
         // manually add mp3, wav, mp4, webm to default extensions
-        exts: [
-          'js',
-          'css',
-          'html',
-          'tpl',
-          'jpg',
-          'jpeg',
-          'png',
-          'gif',
-          'svg',
-          'webp',
-          'ttf',
-          'eot',
-          'otf',
-          'woff',
-          'mp3',
-          'wav',
-          'mp4',
-          'webm',
-          'vtt',
-          'xml'
-        ]
+        ...exts.map(ext => ext.name)
       })
     )
     .pipe(filelist('assetlist.json', { relative: true }))
@@ -172,7 +203,17 @@ export const assetList = () =>
 // map through the resulting assets list and use conditional logic to determine attrs
 // compute with a second function or perform in assetList task with gulp-if
 
-const mappedAssets = list => {};
+const assetsMap = exts.reduce((acc, curr) => { acc[curr.name] = curr.mediaType; return acc; }, {});
+
+const mapAssets = (list) => {
+  return list.map((item, i) => {
+    const extension = item.split('.').pop();
+    return { mediaType: assetsMap[extension], href: item, id: item.split('/').pop().split('.').shift() }
+  })
+};
+
+const mappedAssets = mapAssets(require('../assetlist.json'))
+console.log(mappedAssets)
 
 export const generatePackageFile = () =>
   gulp
@@ -181,7 +222,7 @@ export const generatePackageFile = () =>
       mustache(
         {
           ...settings.meta,
-          assets: require('../assetlist.json'),
+          assets: mappedAssets,
           files: require('../filelist.json')
         },
         { extension: '.opf' }
@@ -194,11 +235,20 @@ export const assets = gulp.series(
   css,
   images,
   fonts,
-  video,
-  audio,
-  captions,
-  scripts
+  // video,
+  // audio,
+  // captions,
+  // scripts
 );
+
+export const assetsSimple = gulp.series(
+  pagesSimple,
+  css,
+  images,
+  fonts
+);
+
+
 
 export const packageEpub = gulp.series(
   assetList,

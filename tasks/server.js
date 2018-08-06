@@ -30,6 +30,21 @@ export function server(done) {
   done();
 }
 
+
+// for initial markup development
+
+export function serverSimple(done) {
+  let config = {
+    server: {
+      baseDir: path.resolve(__dirname, `../reader/epub_content/${epubName}/EPUB/`),
+      directory: true
+    }
+  };
+
+  browser.init(config);
+  done();
+}
+
 export const reload = done => {
   browser.reload();
   done();

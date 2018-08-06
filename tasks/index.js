@@ -4,18 +4,27 @@ var exec = require('child_process').exec;
 
 import { epubName } from './config';
 
-import { server } from './server';
+import { server, serverSimple } from './server';
 import {
   init,
   watchPug,
+  watchPugSimple,
   watchCss,
   watchJs,
   assets,
+  assetsSimple,
   packageEpub
 } from './tasks';
 import { zipEpub } from './zipEpub';
 
 export const build = gulp.series('clean', init, assets, packageEpub);
+
+export const devSimple = gulp.series(
+  assetsSimple,
+  serverSimple,
+  gulp.parallel(watchPugSimple, watchCss)
+)
+
 
 export const dev = gulp.series(
   build,
@@ -25,7 +34,7 @@ export const dev = gulp.series(
 export const validate = done => {
   exec(
     `java -jar bin/epubcheck-4.0.2/epubcheck.jar ${epubName}.epub > ${epubName}.epub.errors 2>&1`,
-    function(err, stdout, stderr) {
+    function (err, stdout, stderr) {
       console.log(stdout);
       console.log(stderr);
     }

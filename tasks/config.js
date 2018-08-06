@@ -2,28 +2,40 @@ import path from 'path';
 import { kebabCase } from 'lodash';
 
 export const settings = {
-  name: 'cc-shared-culture',
+  name: 'TEXTBOOK',
   contentDir: 'EPUB',
   coverImage: {
-    src: '../images/326261902_3fa36f548d.jpg',
-    alt: 'cover-image, child against a wall'
+    src: '../images/cover.jpg',
+    alt: ''
   },
   meta: {
-    title: 'Creative Commons - A Shared Culture',
-    creator: 'Jesse Dylan',
-    identifier: 'code.google.com.epub-samples.cc-shared-culture',
+    title: 'Textbook: Unit 1: The Global Economy',
+    creator: 'NFATC',
+    identifier: 'RU-U1-TX',
     language: 'en-US',
-    modified: '2012-01-20T12:47:00Z',
+    modified: '2015-01-20T12:47:00Z',
     publisher: 'Creative Commons',
-    contributor: 'mgylling',
-    description:
-      'Multiple video tests (see Navigation Document (toc) for details)',
-    rights:
-      'This work is licensed under a Creative Commons Attribution-Noncommercial-Share Alike (CC BY-NC-SA) license.',
-    license: 'http://creativecommons.org/licenses/by-nc-sa/3.0/',
-    attributionURL: 'http://creativecommons.org/videos/a-shared-culture'
+    contributor: 'DEPARTMENT OF STATE',
   }
 };
+
+
+export const exts = [
+  { name: 'js', mediaType: 'application/javascript' },
+  { name: 'css', mediaType: 'text/css' },
+  { name: 'xhtml', mediaType: 'application/xhtml+xml' },
+  { name: 'jpg', mediaType: 'image/jpeg' },
+  { name: 'jpeg', mediaType: 'image/jpeg' },
+  { name: 'png', mediaType: 'image/png' },
+  { name: 'gif', mediaType: 'image/gif' },
+  { name: 'svg', mediaType: 'image/svg+xml' },
+  { name: 'ttf', mediaType: 'application/x-font-ttf' },
+  { name: 'ttc', mediaType: 'application/x-font-ttc' },
+  { name: 'woff', mediaType: 'application/font-woff' },
+  { name: 'woff2', mediaType: 'font/woff2' },
+  { name: 'vtt', mediaType: 'text/vtt' },
+  { name: 'xml', mediaType: 'application/xml' },
+]
 
 export const epubName = kebabCase(settings.name) + '.epub';
 export const readerContentDir = path.resolve(

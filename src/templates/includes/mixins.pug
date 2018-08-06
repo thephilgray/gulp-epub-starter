@@ -1,0 +1,18 @@
+mixin pageHeading(str)
+  .page__heading
+    h1.page__headingText
+        span.page__headingTextTitle= str
+        block subheadingText
+
+mixin pageSectionMarker(str)
+    .page__sectionMarker
+        if pageNumber % 2 === 0
+            .page__sectionMarkerItem.float-left
+                p.page__sectionMarkerText.align-left= str || pageNumber
+        else if pageNumber % 2 === 1
+            .page__sectionMarkerItem.float-right
+                p.page__sectionMarkerText.align-right= str || pageNumber
+        else
+
+mixin russianText(str)
+    span(xml:lang='ru' lang='ru')= str
