@@ -1,0 +1,26 @@
+.page__sectionMarker {
+    padding: $base/2 0;
+    position: relative;
+    @include clearfix;
+}
+
+.page__sectionMarkerItem {
+    display: block;
+}
+
+.page__headingText {
+    background: $darkBlue;
+    border-radius: $base/4;
+    color: #fff;
+    padding: $base/4 $base/2;
+}
+
+.page__headingTextTitle {
+    margin-right: $base;
+}
+
+.page__footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}

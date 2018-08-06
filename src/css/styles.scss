@@ -1,0 +1,176 @@
+@import 'site-settings';
+@import 'base';
+@import 'layout/layout';
+@import 'modules/page';
+@import 'modules/box';
+// Typography
+@import 'node_modules/modularscale-sass/stylesheets/modularscale';
+$modularscale: ( base: $base-font-size, ratio: 1.1);
+body {
+    @extend .times-n;
+    line-height: 1.3;
+}
+
+body * {
+    line-height: inherit;
+}
+
+h1 {
+    font-size: ms(3);
+    line-height: 1.4;
+}
+
+h2 {
+    font-size: ms(2);
+    line-height: 1.3;
+}
+
+h3 {
+    font-size: ms(1);
+    font-weight: bold;
+    line-height: 1.3;
+}
+
+p,
+li,
+h4,
+h5 {
+    font-size: ms(0);
+}
+
+strong {
+    @extend .times-b;
+}
+
+.small {
+    font-size: ms(-1);
+}
+
+/* Text align */
+
+.justified {
+    /* Designed as a class for body — We don't enforce as user setting > author */
+    text-align: justify;
+    adobe-hyphenate: auto;
+    /* proprietary for Legacy RMSDK */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    -epub-hyphens: auto;
+    hyphens: auto;
+    /* before and after not in spec but iBooks support all three (-webkit-) */
+    -ms-hyphenate-limit-lines: 3;
+    -moz-hyphenate-limit-lines: 3;
+    -webkit-hyphenate-limit-lines: 3;
+    hyphenate-limit-lines: 3;
+    /* No support except Trident (Windows) and Webkit (old deprecated syntax) */
+    -ms-hyphenate-limit-chars: 6 3 2;
+    -moz-hyphenate-limit-chars: 6 3 2;
+    -webkit-hyphenate-limit-before: 3;
+    -webkit-hyphenate-limit-after: 2;
+    hyphenate-limit-chars: 6 3 2;
+    /* No support except Trident (Windows) */
+    -ms-hyphenate-limit-zone: 10%;
+    -moz-hyphenate-limit-zone: 10%;
+    -webkit-hyphenate-limit-zone: 10%;
+    hyphenate-limit-zone: 10%;
+    /* No support */
+    -ms-hyphenate-limit-last: always;
+    -moz-hyphenate-limit-last: always;
+    -webkit-hyphenate-limit-last: always;
+    hyphenate-limit-last: always;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.align-center {
+    text-indent: 0;
+    /* Necessary as RS may define text-indent for p */
+    text-align: center;
+}
+
+.align-right {
+    text-indent: 0;
+    /* Necessary as RS may define text-indent for p */
+    text-align: right;
+}
+
+/* Indents */
+
+.indent {
+    text-indent: $base;
+}
+
+.no-indent {
+    text-indent: 0;
+}
+
+.hanging-indent {
+    text-indent: -5%;
+    margin-left: 5%;
+    /* Since em will reflow with font-size user setting, we’re using % */
+}
+
+.content h2 {
+    @extend .times-b;
+    margin: 0;
+    text-transform: uppercase;
+    font-size: $base;
+}
+
+.page__headingText {
+    @extend .arial-n;
+}
+
+.page__sectionMarkerText {
+    @extend .arial-n;
+    font-size: ms(-1);
+    .page__header & {
+        @extend .arial-i;
+        text-decoration: underline;
+    }
+}
+
+ul.toc {
+    margin-right: 0;
+    margin-left: auto;
+    max-width: 95%;
+    padding: 0;
+    overflow-x: hidden;
+    list-style: none;
+    li:before {
+        float: left;
+        width: 0;
+        white-space: nowrap;
+        content: ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . "
+    }
+    span:first-child {
+        padding-right: $base/3;
+        background: white;
+    }
+    span+span.toc__page {
+        float: right;
+        padding-left: $base/3;
+        background: white;
+    }
+    &>li>span {
+        @extend .arial-b;
+    }
+    &>li>span,
+    &>li>ul>li>span {
+        text-transform: uppercase;
+    }
+    &>li {
+        line-height: 2;
+    }
+    &>li>ul>li {
+        @extend .indent;
+        line-height: 1.8;
+    }
+    &>li>ul>li>ul>li {
+        text-indent: $base *2;
+        line-height: 1.6;
+    }
+}

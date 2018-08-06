@@ -1,0 +1,14 @@
+.box {
+    border-style: solid;
+    border-width: 1px;
+    border-color: transparent;
+    padding: $base/4;
+    text-align: center;
+    &--round {
+        border-radius: $base/4;
+    }
+    &--blue {
+        border-color: $darkBlue;
+        color: $darkBlue;
+    }
+}

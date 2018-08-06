@@ -1,0 +1,97 @@
+// @import 'susy';
+// @import 'plugins/svg-grid';
+// Layout
+body {
+    width: 600px;
+    height: 800px;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    border: 1px solid black;
+}
+
+/* global containers */
+
+.page {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: $base/2 $base/2 0;
+    padding: 0;
+}
+
+.content {
+    position: relative;
+    width: 100%;
+    margin: $base 0;
+    clear: both;
+}
+
+.page,
+.content,
+.grid {
+    @include clearfix;
+}
+
+// grids
+.row {
+    width: 100%;
+    min-height: 1px;
+    @include clearfix;
+}
+
+.row+.row {
+    padding-top: $base/2;
+}
+
+@supports (display: -webkit-flex) or (display: flex) {
+    .row {
+        display: flex;
+        align-items: center;
+    }
+}
+
+$columns: 12;
+$gutter: $base;
+$pad: $base;
+[class*='span-'] {
+    float: left;
+    padding-right: $pad;
+    .grid &:last-of-type {
+        padding-right: 0;
+    }
+}
+
+// .grid{
+//     padding: $pad 0;
+// }
+.grid-pad {
+    padding: $pad 0 $pad $pad;
+    [class*='span-']:last-of-type {
+        padding-right: $pad;
+    }
+}
+
+// width helpers
+@for $i from 1 through $columns {
+    .span-#{$i}-of-#{$columns} {
+        width: percentage($i / $columns);
+        float: left;
+    }
+}
+
+$directions: ( 'top', 'right', 'bottom', 'left');
+// padding and margin helpers
+// based on spacing unit
+@for $i from 1 through 20 {
+    @each $direction in $directions {
+        .p-#{$direction}-#{$i} {
+            padding-#{$direction}: percentage($i/20);
+        }
+        .m-#{$direction}-#{$i} {
+            margin-#{$direction}: percentage($i/20);
+        }
+    }
+}

@@ -1,0 +1,63 @@
+/* ========== Reset ========== */
+
+/* apply a natural box layout model to all elements, but allowing components to change */
+
+html {
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+body,
+div,
+dl,
+dt,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+pre,
+a,
+img,
+code,
+blockquote,
+figure,
+table,
+ol,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ========== Fonts ========== */
+
+// ($name, $file, $classname, $weight: normal, $style: normal)
+@include fontface('Arial', '../fonts/Arial', 'arial-n');
+@include fontface('Arial Bold', '../fonts/Arial-Bold', 'arial-b');
+@include fontface('Arial Italic', '../fonts/Arial-Italic', 'arial-i');
+@include fontface('Arial Narrow Bold', '../fonts/Arial-Narrow-Bold', 'arial-nb');
+@include fontface('Arial Bold Italic', '../fonts/Arial-Bold-Italic', 'arial-bi');
+@include fontface('Times New Roman', '../fonts/Times-New-Roman', 'times-n', false);
+@include fontface('Times New Roman Bold', '../fonts/Times-New-Roman-Bold', 'times-b', false);
+@include fontface('Times New Roman Italic', '../fonts/Times-New-Roman-Italic', 'times-i', false);
+@include fontface('Times New Roman Bold Italic', '../fonts/Times-New-Roman-Bold-Italic', 'times-bi', false);

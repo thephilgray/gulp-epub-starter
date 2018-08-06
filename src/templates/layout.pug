@@ -1,12 +1,17 @@
+include ./includes/mixins.pug
+- var title = 'Unit 1: The Global Economy'
 <?xml version="1.0" encoding="UTF-8"?>
 doctype html
-html(xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
-    xmlns:ev="http://www.w3.org/2001/xml-events"
-    epub:prefix="media: http://idpf.org/epub/vocab/media/#")
+html(xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops")
   head
     meta(charset='utf-8')
-    link(type='text/css', href='../css/shared-culture.css', rel='stylesheet')
-    script(src='../script/shared.js', type='text/javascript')
-    block head
-  body
-    block content
+    meta(name='viewport', content='width=600,height=800')
+    title=filename
+    link(type='text/css', href='../css/styles.css', rel='stylesheet')
+  body(id=filename, xml:lang='en', lang='en')
+    .page
+      header.page__header
+        block header
+      block content
+      footer.page__footer(epub:type="pagebreak")
+        +pageSectionMarker()

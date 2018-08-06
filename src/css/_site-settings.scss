@@ -1,0 +1,49 @@
+$base: .95em;
+// Colors
+$darkBlue: #173e96;
+$black: #000;
+$lightBlue: #E9F5F7;
+$brown: #913B39;
+$purple: #540054;
+$bluePurple: #000475;
+// typography
+$base-font-size: $base;
+$base-font-family: 'Times New Roman',
+Times,
+serif;
+$base-font-family-sans: 'Arial',
+Arial,
+sans-serif;
+$base-font-weight: normal;
+$base-font-style: normal;
+// mixins
+@mixin clearfix {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+@mixin fontface($name, $file, $classname, $sans: true, $weight: $base-font-weight, $style: $base-font-style) {
+    @font-face {
+        font-family: "#{$name}";
+        src: url('../fonts/#{$file}.ttf') format('truetype');
+        font-weight: $weight;
+        font-style: $style;
+    }
+    @if $sans {
+        .#{$classname} {
+            font-family: $name, Arial, sans-serif;
+            font-weight: $weight;
+            font-style: $style;
+        }
+    }
+    @else {
+        .#{$classname} {
+            font-family: $name, Times, serif;
+            font-weight: $weight;
+            font-style: $style;
+        }
+    }
+}
