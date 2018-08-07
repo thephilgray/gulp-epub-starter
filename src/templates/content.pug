@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    package(version="3.0" xmlns="http://www.idpf.org/2007/opf" unique-identifier="bookid" prefix="rendition: http://www.idpf.org/vocab/rendition/# ibooks: http://vocabulary.itunes.apple.com/rdf/ibooks/vocabulary-extensions-1.0/ rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+        metadata(xmlns:dc="http://purl.org/dc/elements/1.1/")
+            meta(name="cover" content="coverImage.src")
+            meta(property="ibooks:specified-fonts") true
+            dc:type education
+            dc:title( id="title")= title
+            dc:date= date
+            dc:language= language
+            meta(property="dcterms:modified")= modified
+            dc:identifier( id="bookid")= identifier
+            each val in creator
+                dc:creator= val
+            dc:publisher= publisher
+            meta(property="rendition:layout") pre-paginated
+            meta(property="rendition:orientation") auto
+            meta(property="rendition:spread") none
+        manifest
+            item(id="toc" href="xhtml/toc.xhtml" media-type="application/xhtml+xml" properties="nav")/
+            item(id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml")/
+            item(id="img-cover" href="images/cover.jpg" media-type="image/jpeg" properties="cover-image")/
+            each asset in assets
+                if properties[asset.id]
+                    item(id=asset.id href=asset.href media-type=asset.mediaType properties=properties[asset.id].join(' '))/
+                else
+                    item(id=asset.id href=asset.href media-type=asset.mediaType)/
+        spine(toc="ncx")
+            each file in files
+                itemref(idref=file)/

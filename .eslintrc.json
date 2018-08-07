@@ -1,0 +1,12 @@
+{
+  "extends": [
+    "standard",
+    "prettier",
+    "plugin:prettier/recommended",
+    "prettier/standard"
+  ],
+  "plugins": ["prettier", "standard"],
+  "rules": {
+    "prettier/prettier": "error"
+  }
+}

@@ -1,42 +1,30 @@
-import gulp from 'gulp';
+import "regenerator-runtime/runtime";
+import gulp from "gulp";
+import server from "./server";
+import packageEpub from "./package";
+import init from "./init";
+import { zipEpub } from "./zipEpub";
+import { watchPug, watchCss, watchJs, assets } from "./assets";
+import { epubName } from "./config";
 
-var exec = require('child_process').exec;
+const exec = require("child_process").exec;
 
-import { epubName } from './config';
-
-import { server, serverSimple } from './server';
-import {
-  init,
-  watchPug,
-  watchPugSimple,
-  watchCss,
-  watchJs,
-  assets,
-  assetsSimple,
-  packageEpub
-} from './tasks';
-import { zipEpub } from './zipEpub';
-
-export const build = gulp.series('clean', init, assets, packageEpub);
-
-export const devSimple = gulp.series(
-  assetsSimple,
-  serverSimple,
-  gulp.parallel(watchPugSimple, watchCss)
-)
-
+export const build = gulp.series(init, assets, packageEpub);
 
 export const dev = gulp.series(
   build,
   server,
   gulp.parallel(watchPug, watchCss, watchJs)
 );
+
 export const validate = done => {
   exec(
-    `java -jar bin/epubcheck-4.0.2/epubcheck.jar ${epubName}.epub > ${epubName}.epub.errors 2>&1`,
-    function (err, stdout, stderr) {
+    `java -jar bin/epubcheck-4.0.2/epubcheck.jar ${epubName} > ${epubName}.errors 2>&1`,
+    function(err, stdout, stderr) {
+      if (err) {
+        console.log(stderr);
+      }
       console.log(stdout);
-      console.log(stderr);
     }
   );
   done();

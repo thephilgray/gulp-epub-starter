@@ -1,7 +1,7 @@
 node_modules
 .DS_Store
 assetlist.json
-filelist.json
+pagelist.json
 reader/epub_content/
 *.epub
 *.errors
