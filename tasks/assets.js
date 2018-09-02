@@ -7,7 +7,6 @@ import extReplace from "gulp-ext-replace";
 
 import sass from "gulp-sass";
 import postcss from "gulp-postcss";
-// import postcssEpub from "postcss-epub";
 
 import image from "gulp-image";
 import data from "gulp-data";
@@ -70,18 +69,14 @@ export const pages = () => {
 export const watchPug = () =>
   gulp.watch("./src/**/*.pug", gulp.series(pages, packageEpub, reload));
 
-// sass to css with sourcemap and epub postcss
-
 const sassOptions = {
   errLogToConsole: true,
   outputStyle: PRODUCTION ? "compressed" : "expanded"
-  // includePaths: ["node_modules/susy/sass"]
 };
 
 const postcssPlugins = [
   // use .browserlistrc for browsers option
   autoprefixer()
-  // postcssEpub({ strict: true })
 ];
 
 export const css = () =>
