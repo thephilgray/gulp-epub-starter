@@ -18,7 +18,7 @@ import packageEpub from "./package";
 import { scripts } from "./scripts";
 import { reload } from "./server";
 
-import { contentDir, PRODUCTION, DEVELOPMENT } from "./config";
+import { contentDir, PRODUCTION, DEVELOPMENT, settings } from "./config";
 
 export const pages = () => {
   let currentPageNumber = 0;
@@ -33,7 +33,9 @@ export const pages = () => {
     .pipe(
       pug({
         doctype: "xhtml",
-        locals: {}
+        locals: {
+          settings
+        }
       })
     )
     .pipe(
