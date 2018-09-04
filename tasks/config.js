@@ -5,6 +5,10 @@ import dateFormat from "date-fns/format";
 export const settings = {
   name: "TEXTBOOK",
   contentDir: "OEBPS",
+  viewport: {
+    height: 800,
+    width: 600
+  },
   coverImage: {
     src: "../images/cover.jpg",
     alt: ""
