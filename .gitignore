@@ -6,3 +6,4 @@ reader/epub_content/
 *.epub
 *.errors
 __MACOSX
+builds
