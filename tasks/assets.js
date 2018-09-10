@@ -6,6 +6,7 @@ import htmltidy from "gulp-htmltidy";
 import extReplace from "gulp-ext-replace";
 
 import sass from "gulp-sass";
+import sassVariables from "gulp-sass-variables";
 import postcss from "gulp-postcss";
 
 import image from "gulp-image";
@@ -13,12 +14,19 @@ import data from "gulp-data";
 import autoprefixer from "autoprefixer";
 // import sourcemaps from "gulp-sourcemaps";
 import gulpif from "gulp-if";
+import cssbeautify from "gulp-cssbeautify";
 
 import packageEpub from "./package";
 import { scripts } from "./scripts";
 import { reload } from "./server";
 
-import { contentDir, PRODUCTION, DEVELOPMENT, settings } from "./config";
+import {
+  contentDir,
+  PRODUCTION,
+  DEVELOPMENT,
+  settings,
+  RENDITION
+} from "./config";
 
 export const pages = () => {
   let currentPageNumber = 0;
@@ -34,7 +42,11 @@ export const pages = () => {
       pug({
         doctype: "xhtml",
         locals: {
-          settings
+          epubTitle: settings.meta.title,
+          subtitle: settings.meta.subtitle,
+          modified: settings.meta.modified,
+          viewport: settings.renditions[RENDITION].viewport,
+          rendition: RENDITION
         }
       })
     )
@@ -71,9 +83,12 @@ export const pages = () => {
 export const watchPug = () =>
   gulp.watch("./src/**/*.pug", gulp.series(pages, packageEpub, reload));
 
+// sass to css with sourcemap and epub postcss
+
 const sassOptions = {
   errLogToConsole: true,
   outputStyle: PRODUCTION ? "compressed" : "expanded"
+  // includePaths: ["node_modules/susy/sass"]
 };
 
 const postcssPlugins = [
@@ -84,10 +99,15 @@ const postcssPlugins = [
 export const css = () =>
   gulp
     .src(["./src/css/styles.scss"], { base: "./src/" })
-    // .pipe(sourcemaps.init())
+    .pipe(
+      // pipe $rendition variable into scss for conditional styling
+      sassVariables({
+        $rendition: RENDITION
+      })
+    )
     .pipe(sass(sassOptions).on("error", sass.logError))
     .pipe(postcss(postcssPlugins))
-    // .pipe(sourcemaps.write())
+    .pipe(cssbeautify())
     .pipe(gulp.dest(contentDir));
 
 export const watchCss = () =>
