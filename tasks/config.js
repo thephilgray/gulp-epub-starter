@@ -5,6 +5,26 @@ import dateFormat from "date-fns/format";
 export const settings = {
   name: "TEXTBOOK",
   contentDir: "OEBPS",
+  renditions: {
+    android: {
+      viewport: {
+        height: 1280,
+        width: 800
+      }
+    },
+    kindle: {
+      viewport: {
+        height: 1280,
+        width: 800
+      }
+    },
+    ipad: {
+      viewport: {
+        height: 800,
+        width: 600
+      }
+    }
+  },
   coverImage: {
     src: "../images/cover.jpg",
     alt: ""
@@ -46,8 +66,17 @@ export const settings = {
     }
   }
 };
+export const PRODUCTION = process.env.NODE_ENV === "production";
+export const DEVELOPMENT = process.env.NODE_ENV === "development";
+export const RENDITION = process.env.RENDITION || "ipad";
 
-export const epubName = kebabCase(settings.name) + ".epub";
+export const epubName =
+  kebabCase(settings.name) +
+  "." +
+  RENDITION +
+  "." +
+  settings.meta.modified +
+  ".epub";
 export const readerContentDir = path.resolve(
   __dirname,
   "../reader/epub_content/"
@@ -55,6 +84,3 @@ export const readerContentDir = path.resolve(
 export const buildDir = readerContentDir + "/" + epubName;
 export const contentDirname = settings.contentDir || "OEBPS";
 export const contentDir = buildDir + "/" + contentDirname;
-
-export const PRODUCTION = process.env.NODE_ENV === "production";
-export const DEVELOPMENT = process.env.NODE_ENV === "development";
