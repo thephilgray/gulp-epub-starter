@@ -19,7 +19,7 @@ export const dev = gulp.series(
 
 export const validate = done => {
   exec(
-    `java -jar bin/epubcheck-4.0.2/epubcheck.jar ${epubName} > ${epubName}.errors 2>&1`,
+    `java -jar bin/epubcheck-4.0.2/epubcheck.jar ./builds/${epubName} > ./builds/${epubName}.errors 2>&1`,
     function(err, stdout, stderr) {
       if (err) {
         console.log(stderr);
@@ -30,6 +30,6 @@ export const validate = done => {
   done();
 };
 
-export const publish = gulp.series(zipEpub, validate);
+export const publish = gulp.series(build, zipEpub, validate);
 
 export default dev;
