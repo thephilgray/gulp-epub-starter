@@ -45,7 +45,10 @@ export const pages = () => {
           epubTitle: settings.meta.title,
           subtitle: settings.meta.subtitle,
           modified: settings.meta.modified,
-          viewport: settings.renditions[RENDITION].viewport,
+          viewport:
+            RENDITION === "reflowable"
+              ? false
+              : settings.renditions[RENDITION].viewport,
           rendition: RENDITION
         }
       })
