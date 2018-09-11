@@ -12,9 +12,10 @@
             each val in creator
                 dc:creator= val
             dc:publisher= publisher
-            meta(property="rendition:layout") pre-paginated
-            meta(property="rendition:orientation") auto
-            meta(property="rendition:spread") none
+            if rendition !== 'reflowable'
+                meta(property="rendition:layout") pre-paginated
+                meta(property="rendition:orientation") auto
+                meta(property="rendition:spread") none
         manifest
             item(id="toc" href="xhtml/toc.xhtml" media-type="application/xhtml+xml" properties="nav")/
             item(id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml")/
