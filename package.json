@@ -8,6 +8,7 @@
     "dev:ipad": "RENDITION=ipad NODE_ENV=development gulp --require @babel/register --gulpfile tasks",
     "dev:android": "RENDITION=android NODE_ENV=development gulp --require @babel/register --gulpfile tasks",
     "build": "NODE_ENV=production gulp build --require @babel/register --gulpfile tasks",
+    "build:reflowable": "RENDITION=reflowable NODE_ENV=production gulp build --require @babel/register --gulpfile tasks",
     "build:ipad": "RENDITION=ipad NODE_ENV=production gulp build --require @babel/register --gulpfile tasks",
     "build:android": "RENDITION=android NODE_ENV=production gulp build --require @babel/register --gulpfile tasks",
     "publish": "RENDITION=ipad NODE_ENV=production gulp publish --require @babel/register --gulpfile tasks",
