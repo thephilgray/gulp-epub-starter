@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "NODE_ENV=development gulp --require @babel/register --gulpfile tasks",
+    "dev:reflowable": "RENDITION=reflowable NODE_ENV=development gulp --require @babel/register --gulpfile tasks",
     "dev:ipad": "RENDITION=ipad NODE_ENV=development gulp --require @babel/register --gulpfile tasks",
     "dev:android": "RENDITION=android NODE_ENV=development gulp --require @babel/register --gulpfile tasks",
     "build": "NODE_ENV=production gulp build --require @babel/register --gulpfile tasks",
