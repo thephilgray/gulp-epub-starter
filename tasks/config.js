@@ -6,6 +6,7 @@ import minimist from "minimist";
 export const settings = {
   name: "TEXTBOOK",
   contentDir: "OEBPS",
+  fixed: false,
   renditions: {
     android: {
       viewport: {
@@ -69,16 +70,16 @@ export const settings = {
 };
 export const PRODUCTION = process.env.NODE_ENV === "production";
 export const DEVELOPMENT = process.env.NODE_ENV === "development";
-export const RENDITION = process.env.RENDITION || "ipad";
+export const DEVICE = process.env.DEVICE || "ipad";
 export const FIXED =
   minimist(process.argv.slice(2)).fixed || settings.fixed || false;
 
-console.log(`Using ${FIXED ? "fixed" : "reflowable"} layout`);
+console.log(`Using ${FIXED ? "fixed" : "reflowable"} layout.`);
 
 export const epubName =
   kebabCase(settings.name) +
   "." +
-  RENDITION +
+  DEVICE +
   "." +
   settings.meta.modified +
   ".epub";

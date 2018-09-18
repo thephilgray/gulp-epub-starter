@@ -4,7 +4,7 @@ import fileAssets from "gulp-file-assets";
 import rename from "gulp-rename";
 import pug from "gulp-pug";
 
-import { settings, contentDir, RENDITION } from "./config";
+import { settings, contentDir, DEVICE, FIXED } from "./config";
 
 const assetList = () =>
   gulp
@@ -129,7 +129,8 @@ const generatePackageFile = () =>
           assets: mapAssets(require("../.tmp/assetlist.json")),
           files: require("../.tmp/pagelist.json"),
           properties: settings.pageProperties,
-          rendition: RENDITION
+          device: DEVICE,
+          fixed: FIXED
         }
       })
     )
