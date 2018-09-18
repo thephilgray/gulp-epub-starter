@@ -1,6 +1,7 @@
 import path from "path";
 import kebabCase from "lodash/kebabCase";
 import dateFormat from "date-fns/format";
+import minimist from "minimist";
 
 export const settings = {
   name: "TEXTBOOK",
@@ -69,6 +70,10 @@ export const settings = {
 export const PRODUCTION = process.env.NODE_ENV === "production";
 export const DEVELOPMENT = process.env.NODE_ENV === "development";
 export const RENDITION = process.env.RENDITION || "ipad";
+export const FIXED =
+  minimist(process.argv.slice(2)).fixed || settings.fixed || false;
+
+console.log(`Using ${FIXED ? "fixed" : "reflowable"} layout`);
 
 export const epubName =
   kebabCase(settings.name) +
