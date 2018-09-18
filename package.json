@@ -71,6 +71,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "get-root-node-polyfill": "^1.0.0",
+    "minimist": "^1.2.0",
     "nodelist-foreach-polyfill": "^1.2.0",
     "vue": "^2.5.16"
   },
