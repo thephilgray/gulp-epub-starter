@@ -7,7 +7,7 @@ export const settings = {
   name: "TEXTBOOK",
   contentDir: "OEBPS",
   fixed: false,
-  renditions: {
+  devices: {
     android: {
       viewport: {
         height: 1280,
