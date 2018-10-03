@@ -3,7 +3,8 @@
     "standard",
     "prettier",
     "plugin:prettier/recommended",
-    "prettier/standard"
+    "prettier/standard",
+    "plugin:vue/essential"
   ],
   "plugins": ["prettier", "standard"],
   "rules": {
