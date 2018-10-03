@@ -4,13 +4,6 @@ append config
     - var hasHeader = false
 
 block content
-    .titlepage
-        .content
-            .grid
-                .row
-                    .span-12-of-12.align-center
-                        h1(epub:type='covertitle') Textbook
-                        h2=title
+    #app
 append scripts
-    script
-        script(src='../script/main.js', type='text/javascript')
+    script(src='../script/main.js' type='text/javascript')
