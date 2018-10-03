@@ -1,9 +1,4 @@
 import Vue from "vue";
-import App from "./components/App.vue";
+import TicTacToe from "./components/TicTacToe.vue";
 
-console.log("init vue");
-
-new Vue({
-  el: "#app",
-  render: h => h(App)
-});
+new Vue({ el: '#ticTacToe', render: h => h(TicTacToe) }); // eslint-disable-line
