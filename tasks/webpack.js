@@ -1,7 +1,7 @@
 import path from "path";
 // import glob from "glob";
 // import webpack from 'webpack';
-// import VueLoaderPlugin from "vue-loader/lib/plugin";
+import VueLoaderPlugin from "vue-loader/lib/plugin";
 
 import { contentDir, PRODUCTION } from "./config";
 
@@ -55,7 +55,7 @@ export let config = {
     ]
   },
   plugins: [
-    // new VueLoaderPlugin()
+    new VueLoaderPlugin()
     // new webpack.HotModuleReplacementPlugin()
   ]
 };
