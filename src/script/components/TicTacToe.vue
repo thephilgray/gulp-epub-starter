@@ -1,7 +1,6 @@
-<template>
-    <div>
-        <h1 @click="reverse" :class="{'--reversed': reversed}">{{message}}</h1>
-    </div>
+<template lang="pug">
+  div
+    h1(@click="reverse" :class="{'--reversed': reversed}") {{message}}
 </template>
 <script>
 export default {
@@ -23,17 +22,16 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 h1 {
   color: white;
   background: blue;
-}
 
-h1:hover {
-  cursor: pointer;
-}
-
-.--reversed {
-  text-align: right;
+  &:hover {
+    cursor: pointer;
+  }
+  &.--reversed {
+    text-align: right;
+  }
 }
 </style>

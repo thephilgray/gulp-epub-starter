@@ -48,9 +48,22 @@ export let config = {
         exclude: file => /node_modules/.test(file) && !/\.vue\.js/.test(file)
       },
       {
-        test: /\.css$/,
-        use: ["vue-style-loader", "css-loader"],
-        exclude: file => /css/.test(file) && !/\.css/.test(file)
+        test: /\.scss$/,
+        use: [
+          "vue-style-loader",
+          "css-loader",
+          {
+            loader: "sass-loader",
+            options: {
+              // you can also read from a file, e.g. `variables.scss`
+              data: `$color: red;`
+            }
+          }
+        ]
+      },
+      {
+        test: /\.pug$/,
+        loader: "pug-plain-loader"
       }
     ]
   },
