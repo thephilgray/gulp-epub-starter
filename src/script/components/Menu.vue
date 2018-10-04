@@ -1,7 +1,7 @@
 <template lang="pug">
     .menu
         header.menu__header
-            h1.menu__title Tic Tac Toe
+            h1.menu__title Memory Game
             button(@click="onClick") New Game
 </template>
 
@@ -14,3 +14,15 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.menu {
+  text-align: center;
+}
+button {
+  padding: 0.5em 1em;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+</style>

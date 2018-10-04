@@ -3,7 +3,7 @@ import kebabCase from "lodash/kebabCase";
 import dateFormat from "date-fns/format";
 
 export const settings = {
-  name: "TEXTBOOK",
+  name: "Memory Game Demo",
   contentDir: "OEBPS",
   renditions: {
     android: {
@@ -30,7 +30,7 @@ export const settings = {
     alt: ""
   },
   meta: {
-    title: "Textbook",
+    title: "Memory Game Demo",
     creator: ["Lorem Creator", "Ipsum Creator"],
     date: "2018-08-22T01:47:08-04:00",
     author: "Lorem Author",
