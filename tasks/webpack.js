@@ -56,7 +56,7 @@ export let config = {
             loader: "sass-loader",
             options: {
               // you can also read from a file, e.g. `variables.scss`
-              data: `$color: red;`
+              // data: `$color: red;`
             }
           }
         ]
@@ -66,6 +66,11 @@ export let config = {
         loader: "pug-plain-loader"
       }
     ]
+  },
+  resolve: {
+    alias: {
+      vue$: "vue/dist/vue.esm.js"
+    }
   },
   plugins: [
     new VueLoaderPlugin()

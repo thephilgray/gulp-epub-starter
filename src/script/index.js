@@ -1,4 +1,4 @@
 import Vue from "vue";
-import TicTacToe from "./components/TicTacToe.vue";
+import MemoryGame from "./components/MemoryGame.vue";
 
-new Vue({ el: '#ticTacToe', render: h => h(TicTacToe) }); // eslint-disable-line
+new Vue({ el: '#memoryGame', render: h => h(MemoryGame) }); // eslint-disable-line
