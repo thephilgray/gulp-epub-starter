@@ -76,13 +76,10 @@ export const FIXED =
 
 console.log(`Using ${FIXED ? "fixed" : "reflowable"} layout.`);
 
-export const epubName =
-  kebabCase(settings.name) +
-  "." +
-  DEVICE +
-  "." +
-  settings.meta.modified +
-  ".epub";
+export const epubName = `${kebabCase(settings.name)}.${DEVICE}${
+  PRODUCTION ? "." + settings.meta.modified : ""
+}.epub`;
+
 export const readerContentDir = path.resolve(
   __dirname,
   "../reader/epub_content/"
