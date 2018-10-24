@@ -141,6 +141,9 @@ export const images = () =>
     )
     .pipe(gulp.dest(contentDir));
 
+export const watchImages = () =>
+  gulp.watch("./src/images/*", gulp.series(images, reload));
+
 export const fonts = () =>
   gulp
     .src("./src/fonts/**/*.{ttf,otf,ttc}")
