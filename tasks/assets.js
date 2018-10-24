@@ -25,7 +25,8 @@ import {
   PRODUCTION,
   DEVELOPMENT,
   settings,
-  RENDITION
+  DEVICE,
+  FIXED
 } from "./config";
 
 export const pages = () => {
@@ -45,11 +46,9 @@ export const pages = () => {
           epubTitle: settings.meta.title,
           subtitle: settings.meta.subtitle,
           modified: settings.meta.modified,
-          viewport:
-            RENDITION === "reflowable"
-              ? false
-              : settings.renditions[RENDITION].viewport,
-          rendition: RENDITION
+          viewport: settings.devices[DEVICE].viewport,
+          fixed: FIXED,
+          device: DEVICE
         }
       })
     )
@@ -103,9 +102,10 @@ export const css = () =>
   gulp
     .src(["./src/css/styles.scss"], { base: "./src/" })
     .pipe(
-      // pipe $rendition variable into scss for conditional styling
+      // pipe $device variable into scss for conditional styling
       sassVariables({
-        $rendition: RENDITION
+        $device: DEVICE,
+        $fixed: FIXED
       })
     )
     .pipe(sass(sassOptions).on("error", sass.logError))
