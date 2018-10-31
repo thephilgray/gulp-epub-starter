@@ -57,7 +57,8 @@ export const settings = {
     { name: "vtt", mediaType: "text/vtt" },
     { name: "xml", mediaType: "application/xml" },
     { name: "mp4", mediaType: "video/mp4" },
-    { name: "mp3", mediaType: "audio/mp3" }
+    { name: "mp3", mediaType: "audio/mp3" },
+    { name: "m4a", mediaType: "audio/m4a" }
   ],
   pageProperties: {
     page01: ["scripted"]
