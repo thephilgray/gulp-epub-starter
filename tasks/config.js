@@ -1,7 +1,18 @@
 import path from "path";
+import fs from "fs";
+import yaml from "js-yaml";
 import kebabCase from "lodash/kebabCase";
 import dateFormat from "date-fns/format";
 import minimist from "minimist";
+
+let userSettings;
+
+try {
+  userSettings = yaml.safeLoad(fs.readFileSync("src/config.yaml", "utf8"));
+} catch (e) {
+  console.log(e);
+}
+console.log(userSettings);
 
 export const settings = {
   name: "TEXTBOOK",
@@ -60,15 +71,24 @@ export const settings = {
     { name: "mp3", mediaType: "audio/mp3" },
     { name: "m4a", mediaType: "audio/m4a" }
   ],
-  pageProperties: {
-    page01: ["scripted"]
-  },
   tocPages: {
     page01: {
-      title: "First Page"
+      title: "First Page",
+      properties: ["scripted"]
     }
   }
 };
+
+settings.pageProperties = Object.keys(settings.tocPages).reduce((acc, curr) => {
+  if (
+    settings.tocPages[curr].properties &&
+    settings.tocPages[curr].properties.length > 0
+  ) {
+    acc[curr] = settings.tocPages[curr].properties;
+  }
+  return acc;
+}, {});
+
 export const PRODUCTION = process.env.NODE_ENV === "production";
 export const DEVELOPMENT = process.env.NODE_ENV === "development";
 export const DEVICE = process.env.DEVICE || "ipad";
