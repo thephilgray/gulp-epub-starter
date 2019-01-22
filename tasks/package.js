@@ -63,7 +63,7 @@ const toc = () =>
         doctype: "xhtml",
         pretty: true,
         locals: {
-          title: settings.meta.title,
+          title: settings.title,
           files: require("./../.tmp/pagelist.json"),
           tocPages: settings.tocPages
         }
@@ -108,7 +108,7 @@ const tocNcx = () => {
 //     .pipe(
 //       mustache(
 //         {
-//           title: settings.meta.title,
+//           title: settings.title,
 //           coverImage: settings.coverImage
 //         },
 //         { extension: ".xhtml" }
@@ -124,8 +124,7 @@ const generatePackageFile = () =>
         doctype: "xml",
         pretty: true,
         locals: {
-          ...settings.meta,
-          coverImage: settings.coverImage,
+          ...settings,
           assets: mapAssets(require("../.tmp/assetlist.json")),
           files: require("../.tmp/pagelist.json"),
           properties: settings.pageProperties,

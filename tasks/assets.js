@@ -43,9 +43,9 @@ export const pages = () => {
       pug({
         doctype: "xhtml",
         locals: {
-          epubTitle: settings.meta.title,
-          subtitle: settings.meta.subtitle,
-          modified: settings.meta.modified,
+          epubTitle: settings.title,
+          subtitle: settings.subtitle,
+          modified: settings.modified,
           viewport: settings.devices[DEVICE].viewport,
           fixed: FIXED,
           device: DEVICE

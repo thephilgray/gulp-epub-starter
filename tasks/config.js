@@ -42,16 +42,15 @@ export const settings = {
     src: "../images/cover.jpg",
     alt: ""
   },
-  meta: {
-    title: "Textbook",
-    creator: ["Lorem Creator", "Ipsum Creator"],
-    date: "2018-08-22T01:47:08-04:00",
-    author: "Lorem Author",
-    identifier: "urn:uuidLOREMIPSUM",
-    language: "en-US",
-    modified: dateFormat(new Date(), `YYYY-MM-DDThh:mm`) + ":00Z",
-    publisher: "Lorem Ipsum Publisher"
-  },
+  title: "Textbook",
+  creator: ["Lorem Creator", "Ipsum Creator"],
+  date: "2018-08-22T01:47:08-04:00",
+  author: "Lorem Author",
+  identifier: "urn:uuidLOREMIPSUM",
+  language: "en-US",
+  modified: dateFormat(new Date(), `YYYY-MM-DDThh:mm`) + ":00Z",
+  publisher: "Lorem Ipsum Publisher",
+
   exts: [
     { name: "js", mediaType: "application/javascript" },
     { name: "css", mediaType: "text/css" },
@@ -79,6 +78,8 @@ export const settings = {
   }
 };
 
+// TODO: pageProperties has been added as a property of tocPages. tocPages needs to be renamed throughout.
+
 settings.pageProperties = Object.keys(settings.tocPages).reduce((acc, curr) => {
   if (
     settings.tocPages[curr].properties &&
@@ -98,7 +99,7 @@ export const FIXED =
 console.log(`Using ${FIXED ? "fixed" : "reflowable"} layout.`);
 
 export const epubName = `${kebabCase(settings.name)}.${DEVICE}${
-  PRODUCTION ? "." + settings.meta.modified : ""
+  PRODUCTION ? "." + settings.modified : ""
 }.epub`;
 
 export const readerContentDir = path.resolve(
