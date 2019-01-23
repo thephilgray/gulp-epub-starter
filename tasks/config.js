@@ -23,6 +23,8 @@ try {
   console.error(e);
 }
 
+// TODO: Include global stylesheet and script properties; these can be used to determine the path/name; if null, do not include on every page except where specified in `pages`
+
 const presets = {
   name: "",
   contentDir: "",
@@ -40,7 +42,7 @@ const presets = {
     src: "../images/cover.jpg",
     alt: ""
   },
-  pages: {},
+  pages: {}, // TODO: Include stylesheets and scripts properties
   pageProperties: {},
   devices: {
     android: {
