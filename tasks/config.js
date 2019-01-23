@@ -5,19 +5,43 @@ import kebabCase from "lodash/kebabCase";
 import dateFormat from "date-fns/format";
 import minimist from "minimist";
 
+/**
+ *
+ * TODO: Refactor as a class with getSettings and updateSettings methods, or following redux pattern;
+ * Also handle the `assetlist` and `pagelist` in memory, perhaps merging some shared data with `pages`
+ * Ideally, this should be a robust self-contained api that can be controlled directly from the command line or with build tools like Gulp
+ *
+ */
+
+// TODO: Convert to async
+
 let userSettings;
 
 try {
   userSettings = yaml.safeLoad(fs.readFileSync("src/config.yaml", "utf8"));
 } catch (e) {
-  console.log(e);
+  console.error(e);
 }
-console.log(userSettings);
 
-export const settings = {
-  name: "TEXTBOOK",
-  contentDir: "OEBPS",
+const presets = {
+  name: "",
+  contentDir: "",
   fixed: false,
+  title: {},
+  creator: [{ role: "author", text: "" }],
+  date: "2018-08-22T01:47:08-04:00",
+  author: "",
+  identifier: "",
+  language: "en",
+  type: "",
+  modified: dateFormat(new Date(), `YYYY-MM-DDThh:mm`) + ":00Z",
+  publisher: "",
+  coverImage: {
+    src: "../images/cover.jpg",
+    alt: ""
+  },
+  pages: {},
+  pageProperties: {},
   devices: {
     android: {
       viewport: {
@@ -38,19 +62,6 @@ export const settings = {
       }
     }
   },
-  coverImage: {
-    src: "../images/cover.jpg",
-    alt: ""
-  },
-  title: "Textbook",
-  creator: ["Lorem Creator", "Ipsum Creator"],
-  date: "2018-08-22T01:47:08-04:00",
-  author: "Lorem Author",
-  identifier: "urn:uuidLOREMIPSUM",
-  language: "en-US",
-  modified: dateFormat(new Date(), `YYYY-MM-DDThh:mm`) + ":00Z",
-  publisher: "Lorem Ipsum Publisher",
-
   exts: [
     { name: "js", mediaType: "application/javascript" },
     { name: "css", mediaType: "text/css" },
@@ -69,29 +80,34 @@ export const settings = {
     { name: "mp4", mediaType: "video/mp4" },
     { name: "mp3", mediaType: "audio/mp3" },
     { name: "m4a", mediaType: "audio/m4a" }
-  ],
-  tocPages: {
-    page01: {
-      title: "First Page",
-      properties: ["scripted"]
-    }
-  }
+  ]
 };
 
-// TODO: pageProperties has been added as a property of tocPages. tocPages needs to be renamed throughout.
+const extendedSettings = { ...presets, ...userSettings };
 
-settings.pageProperties = Object.keys(settings.tocPages).reduce((acc, curr) => {
-  if (
-    settings.tocPages[curr].properties &&
-    settings.tocPages[curr].properties.length > 0
-  ) {
-    acc[curr] = settings.tocPages[curr].properties;
-  }
-  return acc;
-}, {});
+// create pageProperties map from pages in userSettings
+
+extendedSettings.pageProperties = Object.keys(extendedSettings.pages).reduce(
+  (acc, curr) => {
+    if (
+      extendedSettings.pages[curr].properties &&
+      extendedSettings.pages[curr].properties.length > 0
+    ) {
+      acc[curr] = extendedSettings.pages[curr].properties;
+    }
+    return acc;
+  },
+  {}
+);
+
+// console.log(extendedSettings);
+
+export const settings = extendedSettings;
 
 export const PRODUCTION = process.env.NODE_ENV === "production";
 export const DEVELOPMENT = process.env.NODE_ENV === "development";
+
+// TODO: Set these on the settings object
 export const DEVICE = process.env.DEVICE || "ipad";
 export const FIXED =
   minimist(process.argv.slice(2)).fixed || settings.fixed || false;

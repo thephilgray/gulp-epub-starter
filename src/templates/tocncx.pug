@@ -10,7 +10,7 @@
         docAuthor
             text= settings.author 
         navMap
-            each val, index in tocPages
+            each val, index in pages
                 navPoint(id="navpoint" + (index + 1) playOrder=(index + 1))
                     navLabel
                         text= val.title

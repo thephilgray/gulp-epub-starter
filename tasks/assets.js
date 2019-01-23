@@ -1,14 +1,11 @@
 import path from "path";
 import gulp from "gulp";
-
 import pug from "gulp-pug";
 import htmltidy from "gulp-htmltidy";
 import extReplace from "gulp-ext-replace";
-
 import sass from "gulp-sass";
 import sassVariables from "gulp-sass-variables";
 import postcss from "gulp-postcss";
-
 import image from "gulp-image";
 import data from "gulp-data";
 import autoprefixer from "autoprefixer";
@@ -43,9 +40,7 @@ export const pages = () => {
       pug({
         doctype: "xhtml",
         locals: {
-          epubTitle: settings.title,
-          subtitle: settings.subtitle,
-          modified: settings.modified,
+          ...settings,
           viewport: settings.devices[DEVICE].viewport,
           fixed: FIXED,
           device: DEVICE

@@ -2,23 +2,22 @@ name: TEXTBOOK
 fixed: false
 contentDir: OEBPS
 coverImage:
-  - src: '../images/cover.jpg'
-    alt: 'cover image'
+  src: images/cover.jpg
+  alt: 'cover image'
 title:
-  - type: main
-    text: Textbook
-  - type: subtitle
-    text: Subtitle
+  main: Textbook
+  subtitle: Subtitle
 creator:
   - role: author
     text: Lorem Creator
   - role: editor
     text: Ipsum Creator
 identifier:
-  - scheme: URN
-    text: urn:uuidLOREMIPSUM
+  scheme: URN
+  text: urn:uuidLOREMIPSUM
 publisher: Publisher
 rights: © 2019 Publisher
+type: education
 date: '2018-08-22T01:47:08-04:00'
 language: en-US
 ibooks:

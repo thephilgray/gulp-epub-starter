@@ -63,9 +63,8 @@ const toc = () =>
         doctype: "xhtml",
         pretty: true,
         locals: {
-          title: settings.title,
-          files: require("./../.tmp/pagelist.json"),
-          tocPages: settings.tocPages
+          ...settings,
+          files: require("./../.tmp/pagelist.json")
         }
       })
     )
@@ -86,9 +85,9 @@ const tocNcx = () => {
         locals: {
           settings,
           files: require("./../.tmp/pagelist.json"),
-          tocPages: Object.keys(settings.tocPages).map(page => ({
+          pages: Object.keys(settings.pages).map(page => ({
             id: page,
-            title: settings.tocPages[page].title
+            title: settings.pages[page].title
           }))
         }
       })

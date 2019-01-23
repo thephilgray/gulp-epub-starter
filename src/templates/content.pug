@@ -2,23 +2,25 @@
     package(version="3.0" xmlns="http://www.idpf.org/2007/opf" unique-identifier="bookid" prefix="rendition: http://www.idpf.org/vocab/rendition/# ibooks: http://vocabulary.itunes.apple.com/rdf/ibooks/vocabulary-extensions-1.0/ rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#")
         metadata(xmlns:dc="http://purl.org/dc/elements/1.1/")
             meta(name="cover" content=coverImage.src)
-            dc:type education
-            dc:title( id="title")= title
+            dc:type= type
+            dc:title( id="title")= title.main
             dc:date= date
             dc:language= language
             meta(property="dcterms:modified")= modified
-            dc:identifier( id="bookid")= identifier
+            dc:identifier( id="bookid")= identifier.text
+            meta(refines="#bookid" property="identifier-type" scheme="xsd:string")= identifier.scheme
             each val in creator
-                dc:creator= val
-            dc:publisher= publisher
-            if rendition !== 'reflowable'
+                dc:creator= val.text
+            if publisher
+                dc:publisher= publisher
+            if fixed
                 meta(property="rendition:layout") pre-paginated
                 meta(property="rendition:orientation") auto
                 meta(property="rendition:spread") none
         manifest
             item(id="toc" href="xhtml/toc.xhtml" media-type="application/xhtml+xml" properties="nav")/
             item(id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml")/
-            item(id="img-cover" href="images/cover.jpg" media-type="image/jpeg" properties="cover-image")/
+            item(id="img-cover" href=coverImage.src media-type="image/jpeg" properties="cover-image")/
             each asset in assets
                 if properties[asset.id]
                     item(id=asset.id href=asset.href media-type=asset.mediaType properties=properties[asset.id].join(' '))/

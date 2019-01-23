@@ -2,13 +2,13 @@
 html(xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops")
     head
       meta(charset="utf-8")/
-      title= title
+      title= title.main
     body
         nav(id="toc" epub:type="toc")
             h2 Table of Contents
             ol
                 each file in files
-                    if tocPages[file]
+                    if pages[file]
                         li
                             a(href=file + ".xhtml")
-                                span.toc-label= tocPages[file].title
+                                span.toc-label= pages[file].toc
