@@ -3,8 +3,13 @@ import gulp from "gulp";
 import pug from "gulp-pug";
 import htmltidy from "gulp-htmltidy";
 import extReplace from "gulp-ext-replace";
-import sass from "gulp-sass";
-import sassVariables from "gulp-sass-variables";
+
+import less from "gulp-less";
+import lessVariables from "gulp-add-less-variables";
+
+// import sass from "gulp-sass";
+// import sassVariables from "gulp-sass-variables";
+
 import postcss from "gulp-postcss";
 import image from "gulp-image";
 import data from "gulp-data";
@@ -82,34 +87,36 @@ export const watchPug = () =>
 
 // sass to css with sourcemap and epub postcss
 
-const sassOptions = {
-  errLogToConsole: true,
-  outputStyle: PRODUCTION ? "compressed" : "expanded"
-  // includePaths: ["node_modules/susy/sass"]
-};
+const lessOptions = {};
 
 const postcssPlugins = [
   // use .browserlistrc for browsers option
   autoprefixer()
 ];
 
-export const css = () =>
-  gulp
-    .src(["./src/css/styles.scss"], { base: "./src/" })
+export const css = () => {
+  // let errorHandler = notify.onError(function(error) {
+  //   console.log("LESS error: " + error.message);
+  //   return "LESS error: " + error.message;
+  // });
+
+  return gulp
+    .src(["./src/css/styles.less"], { base: "./src/" })
     .pipe(
-      // pipe $device variable into scss for conditional styling
-      sassVariables({
-        $device: DEVICE,
-        $fixed: FIXED
+      // pipe $rendition variable into scss for conditional styling
+      lessVariables({
+        device: DEVICE,
+        fixed: FIXED
       })
     )
-    .pipe(sass(sassOptions).on("error", sass.logError))
+    .pipe(less(lessOptions).on("error", console.error.bind(console)))
     .pipe(postcss(postcssPlugins))
     .pipe(cssbeautify())
     .pipe(gulp.dest(contentDir));
+};
 
 export const watchCss = () =>
-  gulp.watch("./src/css/**/*.scss", gulp.series(css, reload));
+  gulp.watch("./src/css/**/*.less", gulp.series(css, reload));
 
 export const watchJs = () =>
   gulp.watch(
