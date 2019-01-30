@@ -33,13 +33,13 @@ const presets = {
   creator: [{ role: "author", text: "" }],
   date: "2018-08-22T01:47:08-04:00",
   author: "",
-  identifier: "",
+  identifier: {},
   language: "en",
   type: "",
   modified: dateFormat(new Date(), `YYYY-MM-DDThh:mm`) + ":00Z",
   publisher: "",
   coverImage: {
-    src: "../images/cover.jpg",
+    src: "images/cover.jpg",
     alt: ""
   },
   pages: {}, // TODO: Include stylesheets and scripts properties
@@ -74,6 +74,7 @@ const presets = {
     { name: "gif", mediaType: "image/gif" },
     { name: "svg", mediaType: "image/svg+xml" },
     { name: "ttf", mediaType: "application/font-sfnt" },
+    { name: "otf", mediaType: "application/font-sfnt" },
     { name: "ttc", mediaType: "application/font-sfnt" },
     { name: "woff", mediaType: "application/font-woff" },
     { name: "woff2", mediaType: "font/woff2" },
@@ -86,6 +87,14 @@ const presets = {
 };
 
 const extendedSettings = { ...presets, ...userSettings };
+
+// allow user to set config.yaml with a path relative to the src root, but modify it relative to pages
+// extendedSettings.coverImage.src = `../${extendedSettings.coverImage.src}`;
+
+// TODO: finalize URN naming convention
+extendedSettings.identifier.text = `${extendedSettings.identifier.text}-${
+  extendedSettings.date
+}`;
 
 // create pageProperties map from pages in userSettings
 
@@ -102,7 +111,7 @@ extendedSettings.pageProperties = Object.keys(extendedSettings.pages).reduce(
   {}
 );
 
-// console.log(extendedSettings);
+console.log(extendedSettings);
 
 export const settings = extendedSettings;
 

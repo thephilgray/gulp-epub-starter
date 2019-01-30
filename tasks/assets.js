@@ -17,6 +17,7 @@ import autoprefixer from "autoprefixer";
 // import sourcemaps from "gulp-sourcemaps";
 import gulpif from "gulp-if";
 import cssbeautify from "gulp-cssbeautify";
+import concat from "gulp-concat";
 
 import packageEpub from "./package";
 import { scripts } from "./scripts";
@@ -101,7 +102,9 @@ export const css = () => {
   // });
 
   return gulp
-    .src(["./src/css/styles.less"], { base: "./src/" })
+    .src("./src/css/styles.less", {
+      base: "./src/"
+    })
     .pipe(
       // pipe $rendition variable into scss for conditional styling
       lessVariables({
@@ -116,7 +119,21 @@ export const css = () => {
 };
 
 export const watchCss = () =>
-  gulp.watch("./src/css/**/*.less", gulp.series(css, reload));
+  gulp.watch(["./src/**/*.less"], gulp.series(css, reload));
+
+// careful: writes back to src directory; gathers all module css and concats it into a single files in srcs/css
+
+export const cssModules = () => {
+  return gulp
+    .src("./src/components/**/*.less", {
+      base: "./src/"
+    })
+    .pipe(concat("components.less"))
+    .pipe(gulp.dest("./src/css/generated"));
+};
+
+export const watchCssModules = () =>
+  gulp.watch(["./src/components/**/*.less"], gulp.series(cssModules, css));
 
 export const watchJs = () =>
   gulp.watch(
@@ -148,7 +165,7 @@ export const watchImages = () =>
 
 export const fonts = () =>
   gulp
-    .src("./src/fonts/**/*.{ttf,otf,ttc}")
+    .src("./src/fonts/**/*.{ttf,otf,ttc,woff,woff2,eot,svg}")
     .pipe(gulp.dest(`${contentDir}/fonts/`));
 
 export const video = () =>
@@ -168,6 +185,7 @@ export const captions = () =>
 
 export const assets = gulp.series(
   pages,
+  cssModules,
   css,
   images,
   fonts,

@@ -83,12 +83,8 @@ const tocNcx = () => {
         doctype: "xml",
         pretty: true,
         locals: {
-          settings,
-          files: require("./../.tmp/pagelist.json"),
-          pages: Object.keys(settings.pages).map(page => ({
-            id: page,
-            title: settings.pages[page].title
-          }))
+          ...settings,
+          files: require("./../.tmp/pagelist.json")
         }
       })
     )

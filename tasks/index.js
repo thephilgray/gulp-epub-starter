@@ -4,7 +4,14 @@ import server from "./server";
 import packageEpub from "./package";
 import init from "./init";
 import { zipEpub } from "./zipEpub";
-import { watchPug, watchCss, watchJs, watchImages, assets } from "./assets";
+import {
+  watchPug,
+  watchCss,
+  watchCssModules,
+  watchJs,
+  watchImages,
+  assets
+} from "./assets";
 import { epubName } from "./config";
 
 const exec = require("child_process").exec;
@@ -14,7 +21,7 @@ export const build = gulp.series(init, assets, packageEpub);
 export const dev = gulp.series(
   build,
   server,
-  gulp.parallel(watchPug, watchCss, watchJs, watchImages)
+  gulp.parallel(watchPug, watchCss, watchCssModules, watchJs, watchImages)
 );
 
 export const validate = done => {
