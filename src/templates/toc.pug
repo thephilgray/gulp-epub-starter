@@ -6,9 +6,13 @@ html(xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/o
     body
         nav(id="toc" epub:type="toc")
             h2 Table of Contents
-            ol
+            ol.tocNav
                 each file in files
                     if pages[file]
                         li
+<<<<<<< Updated upstream
                             a(href=file + ".xhtml")
                                 span.toc-label= pages[file].toc
+=======
+                            a(href=file + ".xhtml")= pages[file].toc.text
+>>>>>>> Stashed changes
