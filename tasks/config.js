@@ -1,7 +1,6 @@
 import path from "path";
 import fs from "fs";
 import yaml from "js-yaml";
-import kebabCase from "lodash/kebabCase";
 import dateFormat from "date-fns/format";
 import minimist from "minimist";
 
@@ -31,12 +30,15 @@ const presets = {
   fixed: false,
   title: {},
   creator: [{ role: "author", text: "" }],
-  date: "2018-08-22T01:47:08-04:00",
+  date: dateFormat(new Date(), `YYYY-MM-DDThh:mm:ss`) + "Z",
   author: "",
-  identifier: {},
+  identifier: {
+    scheme: "URN",
+    text: ""
+  },
   language: "en",
   type: "",
-  modified: dateFormat(new Date(), `YYYY-MM-DDThh:mm`) + ":00Z",
+  modified: dateFormat(new Date(), `YYYY-MM-DDThh:mm:ss`) + "Z",
   publisher: "",
   coverImage: {
     src: "images/cover.jpg",
@@ -92,9 +94,9 @@ const extendedSettings = { ...presets, ...userSettings };
 // extendedSettings.coverImage.src = `../${extendedSettings.coverImage.src}`;
 
 // TODO: finalize URN naming convention
-extendedSettings.identifier.text = `${extendedSettings.identifier.text}-${
-  extendedSettings.date
-}`;
+extendedSettings.identifier.text = `${
+  extendedSettings.identifier.text
+}-${dateFormat(extendedSettings.date.replace("Z", ""), "YYYYMMDD-hhmm")}`;
 
 // create pageProperties map from pages in userSettings
 
@@ -125,8 +127,12 @@ export const FIXED =
 
 console.log(`Using ${FIXED ? "fixed" : "reflowable"} layout.`);
 
-export const epubName = `${kebabCase(settings.name)}.${DEVICE}${
-  PRODUCTION ? "." + settings.modified : ""
+console.log(settings.modified);
+
+export const epubName = `${settings.name}_${DEVICE}${
+  PRODUCTION
+    ? "_" + dateFormat(settings.modified.replace("Z", ""), "YYYYMMDD-hhmm")
+    : ""
 }.epub`;
 
 export const readerContentDir = path.resolve(
