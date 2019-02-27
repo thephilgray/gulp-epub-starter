@@ -31,33 +31,27 @@ import {
   DEVICE,
   FIXED
 } from "./config";
+const filter = require("gulp-filter");
+const purgecss = require("gulp-purgecss");
 
 export const pages = () => {
+  const f = filter(["**", "!**/**/cover.pug"]);
   let currentPageNumber = 0;
-  return gulp
-    .src(["./src/pages/**/*.pug"], { base: "./src/pages/" })
-    .pipe(
-      data(file => ({
-        filename: path.basename(file.path).replace(".pug", ""),
-        pageNumber: ++currentPageNumber
-      }))
-    )
-    .pipe(
-      pug({
-        doctype: "xhtml",
-        locals: {
-          ...settings,
-          viewport: settings.devices[DEVICE].viewport,
-          fixed: FIXED,
-          device: DEVICE
-        }
-      })
-    )
-    .pipe(
-      gulpif(
-        DEVELOPMENT,
-        htmltidy({
+  return (
+    gulp
+      .src(["./src/pages/**/*.pug"], { base: "./src/pages/" })
+      /* filter out cover.pug for kindle */
+      .pipe(gulpif(DEVICE === "kindle", f))
+      .pipe(
+        data(file => ({
+          filename: path.basename(file.path).replace(".pug", ""),
+          pageNumber: ++currentPageNumber
+        }))
+      )
+      .pipe(
+        pug({
           doctype: "xhtml",
+<<<<<<< Updated upstream
           "output-xhtml": "yes",
           indent: "auto",
           wrap: 120,
@@ -77,10 +71,45 @@ export const pages = () => {
           "wrap-attributes": false,
           "drop-empty-elements": "no"
         })
+=======
+          locals: {
+            ...settings,
+            viewport: settings.devices[DEVICE].viewport,
+            fixed: FIXED,
+            device: DEVICE
+          }
+        })
       )
-    )
-    .pipe(extReplace(".xhtml"))
-    .pipe(gulp.dest(contentDir + "/xhtml"));
+      .pipe(
+        gulpif(
+          DEVELOPMENT,
+          htmltidy({
+            doctype: "xhtml",
+            outputXhtml: "yes",
+            indent: "auto",
+            wrap: 120,
+            "wrap-attributes": false,
+            "drop-empty-elements": "no"
+          })
+        )
+>>>>>>> Stashed changes
+      )
+      .pipe(
+        gulpif(
+          PRODUCTION,
+          htmltidy({
+            inputXml: true,
+            outputXhtml: true,
+            indent: "auto",
+            wrap: 120,
+            "wrap-attributes": false,
+            "drop-empty-elements": "no"
+          })
+        )
+      )
+      .pipe(extReplace(".xhtml"))
+      .pipe(gulp.dest(contentDir + "/xhtml"))
+  );
 };
 
 export const watchPug = () =>
@@ -114,6 +143,14 @@ export const css = () => {
     )
     .pipe(less(lessOptions).on("error", console.error.bind(console)))
     .pipe(postcss(postcssPlugins))
+    .pipe(
+      gulpif(
+        PRODUCTION,
+        purgecss({
+          content: [contentDir + "/xhtml/*.xhtml"]
+        })
+      )
+    )
     .pipe(cssbeautify())
     .pipe(gulp.dest(contentDir));
 };
