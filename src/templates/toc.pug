@@ -10,9 +10,4 @@ html(xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/o
                 each file in files
                     if pages[file]
                         li
-<<<<<<< Updated upstream
-                            a(href=file + ".xhtml")
-                                span.toc-label= pages[file].toc
-=======
                             a(href=file + ".xhtml")= pages[file].toc.text
->>>>>>> Stashed changes

@@ -51,27 +51,6 @@ export const pages = () => {
       .pipe(
         pug({
           doctype: "xhtml",
-<<<<<<< Updated upstream
-          "output-xhtml": "yes",
-          indent: "auto",
-          wrap: 120,
-          "wrap-attributes": false,
-          "drop-empty-elements": "no"
-        })
-      )
-    )
-    .pipe(
-      gulpif(
-        PRODUCTION,
-        htmltidy({
-          doctype: "xhtml",
-          "output-xhtml": "yes",
-          indent: "auto",
-          wrap: 120,
-          "wrap-attributes": false,
-          "drop-empty-elements": "no"
-        })
-=======
           locals: {
             ...settings,
             viewport: settings.devices[DEVICE].viewport,
@@ -92,7 +71,6 @@ export const pages = () => {
             "drop-empty-elements": "no"
           })
         )
->>>>>>> Stashed changes
       )
       .pipe(
         gulpif(

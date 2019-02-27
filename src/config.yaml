@@ -24,5 +24,8 @@ ibooks:
   version: 1.3.4
 pages:
   page01:
-    toc: 'First Page'
-    properties: ['scripted']
+    toc:
+      text: 'First Page'
+      level: 1
+    properties:
+      - scripted
