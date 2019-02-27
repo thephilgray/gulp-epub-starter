@@ -22,7 +22,12 @@
             item(id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml")/
             item(id="img-cover" href=coverImage.src media-type="image/jpeg" properties="cover-image")/
             each asset in assets
+<<<<<<< Updated upstream
                 if properties[asset.id]
+=======
+                if asset.href == coverImage.src
+                else if properties[asset.id]
+>>>>>>> Stashed changes
                     item(id=asset.id href=asset.href media-type=asset.mediaType properties=properties[asset.id].join(' '))/
                 else
                     item(id=asset.id href=asset.href media-type=asset.mediaType)/
