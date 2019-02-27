@@ -8,7 +8,7 @@ import {
   watchPug,
   watchCss,
   watchCssModules,
-  watchJs,
+  // watchJs,
   watchImages,
   assets
 } from "./assets";
@@ -21,7 +21,8 @@ export const build = gulp.series(init, assets, packageEpub);
 export const dev = gulp.series(
   build,
   server,
-  gulp.parallel(watchPug, watchCss, watchCssModules, watchJs, watchImages)
+  // gulp.parallel(watchPug, watchCss, watchCssModules, watchJs, watchImages)
+  gulp.parallel(watchPug, watchCss, watchCssModules, watchImages)
 );
 
 export const validate = done => {
@@ -32,11 +33,44 @@ export const validate = done => {
         console.log(stderr);
       }
       console.log(stdout);
+      // open in books automatically
+      // exec(`open ./builds/${epubName}`, (err, stdout, stderr) => {
+      //   if (err) {
+      //     console.error(err);
+      //   }
+      //   console.log(stdout);
+      // });
     }
   );
   done();
 };
 
+/* requires kindlegen installed locally */
+export const kindlegen = done => {
+  exec(`kindlegen ./builds/${epubName}`, (err, stdout, stderr) => {
+    if (err) {
+      console.error(err);
+    }
+    console.log(stdout);
+    // // open it in kindle
+    // exec(kin
+    //   `open -a Kindle ./builds/${epubName.replace(
+    //     ".epub",
+    //     ".mobi"
+    //   )}  > ./builds/${epubName}.errors 2>&1`,
+    //   (err, stdout, stderr) => {
+    //     if (err) {
+    //       console.error(err);
+    //     }
+    //     console.log(stdout);
+    //   }
+    // );
+  });
+  done();
+};
+
 export const publish = gulp.series(build, zipEpub, validate);
+
+export const publishKindle = gulp.series(publish, zipEpub, kindlegen);
 
 export default dev;
