@@ -139,6 +139,6 @@ export const readerContentDir = path.resolve(
   __dirname,
   "../reader/epub_content/"
 );
-export const buildDir = readerContentDir + "/" + epubName;
+export const buildDir = path.join(readerContentDir, epubName);
 export const contentDirname = settings.contentDir || "OEBPS";
-export const contentDir = buildDir + "/" + contentDirname;
+export const contentDir = path.join(buildDir, contentDirname);
