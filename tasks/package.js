@@ -1,22 +1,11 @@
+import path from "path";
+import fs from "fs-extra";
 import gulp from "gulp";
-import filelist from "gulp-filelist";
-import fileAssets from "gulp-file-assets";
+
 import rename from "gulp-rename";
 import pug from "gulp-pug";
 
 import { settings, contentDir, DEVICE, FIXED } from "./config";
-
-const assetList = () =>
-  gulp
-    .src([`${contentDir}/xhtml/*.xhtml`], { base: `${contentDir}` })
-    .pipe(
-      fileAssets({
-        // manually add mp3, wav, mp4, webm to default extensions
-        exts: settings.exts.map(ext => ext.name)
-      })
-    )
-    .pipe(filelist("assetlist.json", { relative: true }))
-    .pipe(gulp.dest("./.tmp/"));
 
 // map through the resulting assets list and use conditional logic to determine attrs
 // compute with a second function or perform in assetList task with gulp-if
@@ -49,12 +38,6 @@ const mapAssets = list => {
   });
 };
 
-const pageList = () =>
-  gulp
-    .src([`${contentDir}/xhtml/*.xhtml`])
-    .pipe(filelist("pagelist.json", { flatten: true, removeExtensions: true }))
-    .pipe(gulp.dest("./.tmp/"));
-
 const toc = () =>
   gulp
     .src("./src/templates/toc.pug")
@@ -63,9 +46,10 @@ const toc = () =>
         doctype: "xhtml",
         pretty: true,
         locals: {
-          title: settings.meta.title,
-          files: require("./../.tmp/pagelist.json"),
-          tocPages: settings.tocPages
+          ...settings,
+          files: fs.readJSONSync(
+            path.resolve(process.cwd(), ".tmp/pagelist.json")
+          )
         }
       })
     )
@@ -84,12 +68,10 @@ const tocNcx = () => {
         doctype: "xml",
         pretty: true,
         locals: {
-          settings,
-          files: require("./../.tmp/pagelist.json"),
-          tocPages: Object.keys(settings.tocPages).map(page => ({
-            id: page,
-            title: settings.tocPages[page].title
-          }))
+          ...settings,
+          files: fs.readJSONSync(
+            path.resolve(process.cwd(), ".tmp/pagelist.json")
+          )
         }
       })
     )
@@ -108,7 +90,7 @@ const tocNcx = () => {
 //     .pipe(
 //       mustache(
 //         {
-//           title: settings.meta.title,
+//           title: settings.title,
 //           coverImage: settings.coverImage
 //         },
 //         { extension: ".xhtml" }
@@ -124,10 +106,13 @@ const generatePackageFile = () =>
         doctype: "xml",
         pretty: true,
         locals: {
-          ...settings.meta,
-          coverImage: settings.coverImage,
-          assets: mapAssets(require("../.tmp/assetlist.json")),
-          files: require("../.tmp/pagelist.json"),
+          ...settings,
+          assets: mapAssets(
+            fs.readJSONSync(path.resolve(process.cwd(), ".tmp/assetList.json"))
+          ),
+          files: fs.readJSONSync(
+            path.resolve(process.cwd(), ".tmp/pagelist.json")
+          ),
           properties: settings.pageProperties,
           device: DEVICE,
           fixed: FIXED
@@ -142,8 +127,6 @@ const generatePackageFile = () =>
     .pipe(gulp.dest(contentDir));
 
 export default gulp.series(
-  assetList,
-  pageList,
   // cover,
   toc,
   tocNcx,

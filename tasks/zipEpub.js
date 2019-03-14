@@ -1,14 +1,15 @@
+import path from "path";
 import fs from "fs";
 import mkdirp from "mkdirp";
-import { buildDir, epubName } from "./config";
+import { buildDir, epubName, distDir } from "./config";
 import epubZip from "epub-zip";
 
 export const zipEpub = async () => {
   const content = await epubZip(`${buildDir}`);
-  mkdirp("./builds", err => {
+  mkdirp(distDir, err => {
     if (err) console.error(err);
     else {
-      return fs.writeFileSync(`./builds/${epubName}`, content);
+      return fs.writeFileSync(path.join(distDir, epubName), content);
     }
   });
 };

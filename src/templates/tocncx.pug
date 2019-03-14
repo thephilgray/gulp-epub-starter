@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     ncx(xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1")
         head
-            meta(name="dtb:uid" content=settings.meta.identifier)/
+            meta(name="dtb:uid" content=identifier.text)/
             meta(name="dtb:depth" content="0")/
             meta(name="dtb:totalPageCount" content="0")/
             meta(name="dtb:maxPageNumber" content="0")/
         docTitle
-            text= settings.meta.title
-        docAuthor
-            text= settings.meta.author 
+            text= title.main
+        if author
+            docAuthor
+                text= author 
         navMap
-            each val, index in tocPages
-                navPoint(id="navpoint" + (index + 1) playOrder=(index + 1))
-                    navLabel
-                        text= val.title
-                    content(src="xhtml/" + val.id + ".xhtml")/
+            - var index = 1
+            each file in files
+                if pages[file] && pages[file].toc
+                    navPoint(id="navpoint" + index, playOrder=index)
+                        navLabel
+                            text= pages[file].toc.text
+                        content(src="xhtml/" + file + ".xhtml")/
+                    - index++

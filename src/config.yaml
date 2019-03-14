@@ -1,0 +1,31 @@
+name: TEXTBOOK
+fixed: false
+contentDir: OEBPS
+coverImage:
+  src: images/cover.jpg
+  alt: 'cover image'
+title:
+  main: Textbook
+  subtitle: Subtitle
+creator:
+  - role: author
+    text: Lorem Creator
+  - role: editor
+    text: Ipsum Creator
+identifier:
+  scheme: URN
+  text: urn:uuidLOREMIPSUM
+publisher: Publisher
+rights: © 2019 Publisher
+type: education
+date: '2018-08-22T01:47:08-04:00'
+language: en-US
+ibooks:
+  version: 1.3.4
+pages:
+  page01:
+    toc:
+      text: 'First Page'
+      level: 1
+    properties:
+      - scripted

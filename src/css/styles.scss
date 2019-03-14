@@ -1,7 +1,0 @@
-body {
-  background: red;
-  // confirm fixed/reflowable layout boolean is piping in
-  @if $fixed == true {
-    background: green;
-  }
-}

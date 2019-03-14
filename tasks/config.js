@@ -1,12 +1,51 @@
 import path from "path";
-import kebabCase from "lodash/kebabCase";
+import fs from "fs";
+import yaml from "js-yaml";
 import dateFormat from "date-fns/format";
 import minimist from "minimist";
 
-export const settings = {
-  name: "TEXTBOOK",
-  contentDir: "OEBPS",
+/**
+ *
+ * TODO: Refactor as a class with getSettings and updateSettings methods, or following redux pattern;
+ * Also handle the `assetlist` and `pagelist` in memory, perhaps merging some shared data with `pages`
+ * Ideally, this should be a robust self-contained api that can be controlled directly from the command line or with build tools like Gulp
+ *
+ */
+
+// TODO: Convert to async
+
+let userSettings;
+
+try {
+  userSettings = yaml.safeLoad(fs.readFileSync("src/config.yaml", "utf8"));
+} catch (e) {
+  console.error(e);
+}
+
+// TODO: Include global stylesheet and script properties; these can be used to determine the path/name; if null, do not include on every page except where specified in `pages`
+
+const presets = {
+  name: "",
+  contentDir: "",
   fixed: false,
+  title: {},
+  creator: [{ role: "author", text: "" }],
+  date: dateFormat(new Date(), `YYYY-MM-DDThh:mm:ss`) + "Z",
+  author: "",
+  identifier: {
+    scheme: "URN",
+    text: ""
+  },
+  language: "en",
+  type: "",
+  modified: dateFormat(new Date(), `YYYY-MM-DDThh:mm:ss`) + "Z",
+  publisher: "",
+  coverImage: {
+    src: "images/cover.jpg",
+    alt: ""
+  },
+  pages: {}, // TODO: Include stylesheets and scripts properties
+  pageProperties: {},
   devices: {
     android: {
       viewport: {
@@ -27,20 +66,6 @@ export const settings = {
       }
     }
   },
-  coverImage: {
-    src: "../images/cover.jpg",
-    alt: ""
-  },
-  meta: {
-    title: "Textbook",
-    creator: ["Lorem Creator", "Ipsum Creator"],
-    date: "2018-08-22T01:47:08-04:00",
-    author: "Lorem Author",
-    identifier: "urn:uuidLOREMIPSUM",
-    language: "en-US",
-    modified: dateFormat(new Date(), `YYYY-MM-DDThh:mm`) + ":00Z",
-    publisher: "Lorem Ipsum Publisher"
-  },
   exts: [
     { name: "js", mediaType: "application/javascript" },
     { name: "css", mediaType: "text/css" },
@@ -51,6 +76,7 @@ export const settings = {
     { name: "gif", mediaType: "image/gif" },
     { name: "svg", mediaType: "image/svg+xml" },
     { name: "ttf", mediaType: "application/font-sfnt" },
+    { name: "otf", mediaType: "application/font-sfnt" },
     { name: "ttc", mediaType: "application/font-sfnt" },
     { name: "woff", mediaType: "application/font-woff" },
     { name: "woff2", mediaType: "font/woff2" },
@@ -59,32 +85,58 @@ export const settings = {
     { name: "mp4", mediaType: "video/mp4" },
     { name: "mp3", mediaType: "audio/mp3" },
     { name: "m4a", mediaType: "audio/m4a" }
-  ],
-  pageProperties: {
-    page01: ["scripted"]
-  },
-  tocPages: {
-    page01: {
-      title: "First Page"
-    }
-  }
+  ]
 };
+
+const extendedSettings = { ...presets, ...userSettings };
+
+// allow user to set config.yaml with a path relative to the src root, but modify it relative to pages
+// extendedSettings.coverImage.src = `../${extendedSettings.coverImage.src}`;
+
+// TODO: finalize URN naming convention
+extendedSettings.identifier.text = `${
+  extendedSettings.identifier.text
+}-${dateFormat(extendedSettings.date.replace("Z", ""), "YYYYMMDD-hhmm")}`;
+
+// create pageProperties map from pages in userSettings
+
+extendedSettings.pageProperties = Object.keys(extendedSettings.pages).reduce(
+  (acc, curr) => {
+    if (
+      extendedSettings.pages[curr].properties &&
+      extendedSettings.pages[curr].properties.length > 0
+    ) {
+      acc[curr] = extendedSettings.pages[curr].properties;
+    }
+    return acc;
+  },
+  {}
+);
+
+console.log(extendedSettings);
+
+export const settings = extendedSettings;
+
 export const PRODUCTION = process.env.NODE_ENV === "production";
 export const DEVELOPMENT = process.env.NODE_ENV === "development";
+
+// TODO: Set these on the settings object
 export const DEVICE = process.env.DEVICE || "ipad";
 export const FIXED =
   minimist(process.argv.slice(2)).fixed || settings.fixed || false;
 
 console.log(`Using ${FIXED ? "fixed" : "reflowable"} layout.`);
 
-export const epubName = `${kebabCase(settings.name)}.${DEVICE}${
-  PRODUCTION ? "." + settings.meta.modified : ""
+console.log(settings.modified);
+
+export const epubName = `${settings.name}_${DEVICE}${
+  PRODUCTION
+    ? "_" + dateFormat(settings.modified.replace("Z", ""), "YYYYMMDD-hhmm")
+    : ""
 }.epub`;
 
-export const readerContentDir = path.resolve(
-  __dirname,
-  "../reader/epub_content/"
-);
-export const buildDir = readerContentDir + "/" + epubName;
+export const readerContentDir = path.resolve(process.cwd(), "builds");
+export const buildDir = path.join(readerContentDir, epubName);
 export const contentDirname = settings.contentDir || "OEBPS";
-export const contentDir = buildDir + "/" + contentDirname;
+export const contentDir = path.join(buildDir, contentDirname);
+export const distDir = path.join(process.cwd(), "dist");
