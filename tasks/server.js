@@ -1,8 +1,8 @@
-import path from "path";
-import { buildDir } from "./config";
+import settings from "./config";
 import LaunchEpub from "launch-epub";
 
-const readium = new LaunchEpub(buildDir);
+const { buildPath } = settings;
+const readium = new LaunchEpub(buildPath);
 
 export const reload = done => {
   readium.reload();

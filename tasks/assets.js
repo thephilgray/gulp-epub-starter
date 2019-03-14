@@ -8,10 +8,6 @@ import filelist from "gulp-filelist";
 import fileAssets from "gulp-file-assets";
 import less from "gulp-less";
 import lessVariables from "gulp-add-less-variables";
-
-// import sass from "gulp-sass";
-// import sassVariables from "gulp-sass-variables";
-
 import postcss from "gulp-postcss";
 import image from "gulp-image";
 import data from "gulp-data";
@@ -22,21 +18,14 @@ import cssbeautify from "gulp-cssbeautify";
 import concat from "gulp-concat";
 
 import packageEpub from "./package";
-import { scripts } from "./scripts";
 import { reload } from "./server";
 
-import {
-  contentDir,
-  PRODUCTION,
-  DEVELOPMENT,
-  settings,
-  DEVICE,
-  FIXED
-} from "./config";
+import settings from "./config";
 const filter = require("gulp-filter");
 const purgecss = require("gulp-purgecss");
 
-export const cleanPages = () => del([`${contentDir}/xhtml/*.xhtml`]);
+export const cleanPages = () =>
+  del([`${settings.contentDirPath}/xhtml/*.xhtml`]);
 
 export const pages = () => {
   const f = filter(["**", "!**/**/cover.pug"]);
@@ -47,7 +36,7 @@ export const pages = () => {
         base: "./src/pages/"
       })
       /* filter out cover.pug for kindle */
-      .pipe(gulpif(DEVICE === "kindle", f))
+      .pipe(gulpif(settings.DEVICE === "kindle", f))
       .pipe(
         data(file => ({
           filename: path.basename(file.path).replace(".pug", ""),
@@ -59,15 +48,15 @@ export const pages = () => {
           doctype: "xhtml",
           locals: {
             ...settings,
-            viewport: settings.devices[DEVICE].viewport,
-            fixed: FIXED,
-            device: DEVICE
+            viewport: settings.devices[settings.DEVICE].viewport,
+            fixed: settings.FIXED,
+            device: settings.DEVICE
           }
         })
       )
       .pipe(
         gulpif(
-          DEVELOPMENT,
+          settings.DEVELOPMENT,
           htmltidy({
             doctype: "xhtml",
             outputXhtml: "yes",
@@ -80,7 +69,7 @@ export const pages = () => {
       )
       .pipe(
         gulpif(
-          PRODUCTION,
+          settings.PRODUCTION,
           htmltidy({
             inputXml: true,
             outputXhtml: true,
@@ -92,7 +81,7 @@ export const pages = () => {
         )
       )
       .pipe(extReplace(".xhtml"))
-      .pipe(gulp.dest(contentDir + "/xhtml"))
+      .pipe(gulp.dest(settings.contentDirPath + "/xhtml"))
   );
 };
 
@@ -109,8 +98,6 @@ export const watchPugUnlink = () =>
     gulp.series(cleanPages, pages, assetList, pageList, packageEpub, reload)
   );
 
-// sass to css with sourcemap and epub postcss
-
 const lessOptions = {};
 
 const postcssPlugins = [
@@ -119,11 +106,6 @@ const postcssPlugins = [
 ];
 
 export const css = () => {
-  // let errorHandler = notify.onError(function(error) {
-  //   console.log("LESS error: " + error.message);
-  //   return "LESS error: " + error.message;
-  // });
-
   return gulp
     .src("./src/css/styles.less", {
       base: "./src/"
@@ -131,22 +113,22 @@ export const css = () => {
     .pipe(
       // pipe $rendition variable into scss for conditional styling
       lessVariables({
-        device: DEVICE,
-        fixed: FIXED
+        device: settings.DEVICE,
+        fixed: settings.FIXED
       })
     )
     .pipe(less(lessOptions).on("error", console.error.bind(console)))
     .pipe(postcss(postcssPlugins))
     .pipe(
       gulpif(
-        PRODUCTION,
+        settings.PRODUCTION,
         purgecss({
-          content: [contentDir + "/xhtml/*.xhtml"]
+          content: [settings.contentDirPath + "/xhtml/*.xhtml"]
         })
       )
     )
     .pipe(cssbeautify())
-    .pipe(gulp.dest(contentDir));
+    .pipe(gulp.dest(settings.contentDirPath));
 };
 
 export const watchCss = () =>
@@ -166,21 +148,15 @@ export const cssModules = () => {
 export const watchCssModules = () =>
   gulp.watch(["./src/components/**/*.less"], gulp.series(cssModules, css));
 
-export const watchJs = () =>
-  gulp.watch(
-    ["./src/script/**/*.js", "./src/script/**/*.vue"],
-    gulp.series(scripts, reload)
-  );
-
 export const images = () =>
   gulp
-    .src(["./src/images/*"], { base: "./src/" })
+    .src(["./src/**/*.{jpg,jpeg,png,gif,svg}"], { base: "./src/" })
     .pipe(
       image({
         pngquant: false,
         optipng: false,
         zopflipng: false,
-        jpegRecompress: PRODUCTION,
+        jpegRecompress: settings.PRODUCTION,
         mozjpeg: false,
         guetzli: false,
         gifsicle: false,
@@ -189,34 +165,39 @@ export const images = () =>
         quiet: true // defaults to false
       })
     )
-    .pipe(gulp.dest(contentDir));
+    .pipe(gulp.dest(settings.contentDirPath));
 
 export const watchImages = () =>
   gulp.watch("./src/images/*", gulp.series(images, reload));
 
-export const fonts = () =>
-  gulp
-    .src("./src/fonts/**/*.{ttf,otf,ttc,woff,woff2,eot,svg}")
-    .pipe(gulp.dest(`${contentDir}/fonts/`));
+// for now, just handle js as static assets
+// TODO: reintroduce bundling in a later version
 
-export const video = () =>
-  gulp
-    .src("./src/video/**/*.{mp4,webm}")
-    .pipe(gulp.dest(`${contentDir}/video/`));
+const staticExtensions = settings.exts
+  .filter(ext => !["xhtml,css,jpg,jpeg,png,gif,svg"].includes(ext.name))
+  .map(ext => ext.name)
+  .join(",");
 
-export const audio = () =>
-  gulp
-    .src("./src/audio/**/*.{mp3,wav}")
-    .pipe(gulp.dest(`${contentDir}/audio/`));
+console.log(staticExtensions);
 
-export const captions = () =>
+export const staticAssets = () =>
   gulp
-    .src("./src/captions/**/*.{vtt,xml}")
-    .pipe(gulp.dest(`${contentDir}/captions/`));
+    .src(`./src/**/*.{${staticExtensions}}`)
+    .pipe(gulp.dest(settings.contentDirPath));
+
+export const watchStatic = () =>
+  gulp.watch(
+    [`./src/**/*.{${staticExtensions}}`],
+    gulp.series(staticAssets, reload)
+  );
+
+// TODO: Run analysis before compile so that unused assets can be filtered out of the streams
 
 const assetList = () =>
   gulp
-    .src([`${contentDir}/xhtml/*.xhtml`], { base: `${contentDir}` })
+    .src([`${settings.contentDirPath}/xhtml/*.xhtml`], {
+      base: `${settings.contentDirPath}`
+    })
     .pipe(
       fileAssets({
         // manually add mp3, wav, mp4, webm to default extensions
@@ -228,7 +209,7 @@ const assetList = () =>
 
 const pageList = () =>
   gulp
-    .src([`${contentDir}/xhtml/*.xhtml`])
+    .src([`${settings.contentDirPath}/xhtml/*.xhtml`])
     .pipe(filelist("pagelist.json", { flatten: true, removeExtensions: true }))
     .pipe(gulp.dest("./.tmp/"));
 
@@ -236,12 +217,8 @@ export const assets = gulp.series(
   pages,
   cssModules,
   css,
-  assetList,
-  pageList,
   images,
-  fonts,
-  video,
-  audio,
-  captions,
-  scripts,
+  staticAssets,
+  assetList,
+  pageList
 );

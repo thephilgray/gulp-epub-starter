@@ -24,10 +24,14 @@ try {
 
 // TODO: Include global stylesheet and script properties; these can be used to determine the path/name; if null, do not include on every page except where specified in `pages`
 
-const presets = {
+const settings = {
   name: "",
-  contentDir: "",
-  fixed: false,
+  distPath: path.join(process.cwd(), "dist"),
+  PRODUCTION: process.env.NODE_ENV === "production",
+  DEVELOPMENT: process.env.NODE_ENV === "development",
+  DEVICE: process.env.DEVICE || "ipad",
+  FIXED: minimist(process.argv.slice(2)).fixed || false,
+  contentDirname: "OEBPS",
   title: {},
   creator: [{ role: "author", text: "" }],
   date: dateFormat(new Date(), `YYYY-MM-DDThh:mm:ss`) + "Z",
@@ -85,58 +89,44 @@ const presets = {
     { name: "mp4", mediaType: "video/mp4" },
     { name: "mp3", mediaType: "audio/mp3" },
     { name: "m4a", mediaType: "audio/m4a" }
-  ]
+  ],
+
+  ...userSettings
 };
 
-const extendedSettings = { ...presets, ...userSettings };
-
 // allow user to set config.yaml with a path relative to the src root, but modify it relative to pages
-// extendedSettings.coverImage.src = `../${extendedSettings.coverImage.src}`;
+// settings.coverImage.src = `../${settings.coverImage.src}`;
 
 // TODO: finalize URN naming convention
-extendedSettings.identifier.text = `${
-  extendedSettings.identifier.text
-}-${dateFormat(extendedSettings.date.replace("Z", ""), "YYYYMMDD-hhmm")}`;
+settings.identifier.text = `${settings.identifier.text}-${dateFormat(
+  settings.date.replace("Z", ""),
+  "YYYYMMDD-hhmm"
+)}`;
 
 // create pageProperties map from pages in userSettings
+settings.pageProperties = Object.keys(settings.pages).reduce((acc, curr) => {
+  if (
+    settings.pages[curr].properties &&
+    settings.pages[curr].properties.length > 0
+  ) {
+    acc[curr] = settings.pages[curr].properties;
+  }
+  return acc;
+}, {});
 
-extendedSettings.pageProperties = Object.keys(extendedSettings.pages).reduce(
-  (acc, curr) => {
-    if (
-      extendedSettings.pages[curr].properties &&
-      extendedSettings.pages[curr].properties.length > 0
-    ) {
-      acc[curr] = extendedSettings.pages[curr].properties;
-    }
-    return acc;
-  },
-  {}
-);
-
-console.log(extendedSettings);
-
-export const settings = extendedSettings;
-
-export const PRODUCTION = process.env.NODE_ENV === "production";
-export const DEVELOPMENT = process.env.NODE_ENV === "development";
-
-// TODO: Set these on the settings object
-export const DEVICE = process.env.DEVICE || "ipad";
-export const FIXED =
-  minimist(process.argv.slice(2)).fixed || settings.fixed || false;
-
-console.log(`Using ${FIXED ? "fixed" : "reflowable"} layout.`);
-
-console.log(settings.modified);
-
-export const epubName = `${settings.name}_${DEVICE}${
-  PRODUCTION
+settings.epubName = `${settings.name}_${settings.DEVICE}${
+  settings.PRODUCTION
     ? "_" + dateFormat(settings.modified.replace("Z", ""), "YYYYMMDD-hhmm")
     : ""
 }.epub`;
 
-export const readerContentDir = path.resolve(process.cwd(), "builds");
-export const buildDir = path.join(readerContentDir, epubName);
-export const contentDirname = settings.contentDir || "OEBPS";
-export const contentDir = path.join(buildDir, contentDirname);
-export const distDir = path.join(process.cwd(), "dist");
+settings.buildPath = path.resolve(process.cwd(), "builds", settings.epubName);
+settings.contentDirPath = path.resolve(
+  settings.buildPath,
+  settings.contentDirname
+);
+
+console.log(`Using ${settings.FIXED ? "fixed" : "reflowable"} layout.`);
+console.log(settings);
+
+export default settings;
