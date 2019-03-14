@@ -36,7 +36,6 @@
     "@babel/register": "^7.0.0-beta.54",
     "autoprefixer": "^9.1.0",
     "babel-loader": "^8.0.0-beta.4",
-    "browser-sync": "^2.24.6",
     "css-loader": "^1.0.0",
     "date-fns": "^1.29.0",
     "del": "^3.0.0",
@@ -71,6 +70,7 @@
     "gulp-sass-variables": "^1.2.0",
     "gulp-sourcemaps": "^2.6.4",
     "js-yaml": "^3.12.1",
+    "launch-epub": "git+https://github.com/thephilgray/launch-epub.git",
     "lodash": "^4.17.10",
     "merge-stream": "^1.0.1",
     "mkdirp": "^0.5.1",
@@ -87,6 +87,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
+    "fs-extra": "^7.0.1",
     "get-root-node-polyfill": "^1.0.0",
     "gulp-filter": "^5.1.0",
     "gulp-purgecss": "^1.1.1",
