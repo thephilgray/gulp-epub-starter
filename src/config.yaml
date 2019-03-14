@@ -1,6 +1,6 @@
 name: TEXTBOOK
-fixed: false
-contentDir: OEBPS
+FIXED: false
+contentDirname: OEBPS
 coverImage:
   src: images/cover.jpg
   alt: 'cover image'

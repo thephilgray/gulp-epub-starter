@@ -5,7 +5,7 @@ import gulp from "gulp";
 import rename from "gulp-rename";
 import pug from "gulp-pug";
 
-import { settings, contentDir, DEVICE, FIXED } from "./config";
+import settings from "./config";
 
 // map through the resulting assets list and use conditional logic to determine attrs
 // compute with a second function or perform in assetList task with gulp-if
@@ -58,7 +58,7 @@ const toc = () =>
         path.extname = ".xhtml";
       })
     )
-    .pipe(gulp.dest(`${contentDir}/xhtml/`));
+    .pipe(gulp.dest(`${settings.contentDirPath}/xhtml/`));
 
 const tocNcx = () => {
   return gulp
@@ -81,7 +81,7 @@ const tocNcx = () => {
         path.extname = ".ncx";
       })
     )
-    .pipe(gulp.dest(`${contentDir}/`));
+    .pipe(gulp.dest(`${settings.contentDirPath}/`));
 };
 
 // const cover = () =>
@@ -96,7 +96,7 @@ const tocNcx = () => {
 //         { extension: ".xhtml" }
 //       )
 //     )
-//     .pipe(gulp.dest(`${contentDir}/xhtml/`));
+//     .pipe(gulp.dest(`${settings.contentDirPath}/xhtml/`));
 
 const generatePackageFile = () =>
   gulp
@@ -114,8 +114,8 @@ const generatePackageFile = () =>
             path.resolve(process.cwd(), ".tmp/pagelist.json")
           ),
           properties: settings.pageProperties,
-          device: DEVICE,
-          fixed: FIXED
+          device: settings.DEVICE,
+          fixed: settings.FIXED
         }
       })
     )
@@ -124,7 +124,7 @@ const generatePackageFile = () =>
         path.extname = ".opf";
       })
     )
-    .pipe(gulp.dest(contentDir));
+    .pipe(gulp.dest(settings.contentDirPath));
 
 export default gulp.series(
   // cover,
