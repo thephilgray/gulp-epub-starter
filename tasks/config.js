@@ -135,10 +135,8 @@ export const epubName = `${settings.name}_${DEVICE}${
     : ""
 }.epub`;
 
-export const readerContentDir = path.resolve(
-  __dirname,
-  "../reader/epub_content/"
-);
+export const readerContentDir = path.resolve(process.cwd(), "builds");
 export const buildDir = path.join(readerContentDir, epubName);
 export const contentDirname = settings.contentDir || "OEBPS";
 export const contentDir = path.join(buildDir, contentDirname);
+export const distDir = path.join(process.cwd(), "dist");
