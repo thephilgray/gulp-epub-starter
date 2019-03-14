@@ -236,12 +236,12 @@ export const assets = gulp.series(
   pages,
   cssModules,
   css,
+  assetList,
+  pageList,
   images,
   fonts,
   video,
   audio,
   captions,
   scripts,
-  assetList,
-  pageList
 );
