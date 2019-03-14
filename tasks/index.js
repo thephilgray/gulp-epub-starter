@@ -38,7 +38,7 @@ export const dev = gulp.series(
 
 export const validate = done => {
   exec(
-    `java -jar bin/epubcheck-4.0.2/epubcheck.jar ./builds/${epubName} > ./builds/${epubName}.errors 2>&1`,
+    `java -jar bin/epubcheck-4.0.2/epubcheck.jar ./dist/${epubName} > ./dist/${epubName}.errors 2>&1`,
     function(err, stdout, stderr) {
       if (err) {
         console.log(stderr);
@@ -51,7 +51,7 @@ export const validate = done => {
 
 /* requires kindlegen installed locally */
 export const kindlegen = done => {
-  exec(`kindlegen ./builds/${epubName}`, (err, stdout, stderr) => {
+  exec(`kindlegen ./dist/${epubName}`, (err, stdout, stderr) => {
     if (err) {
       console.error(err);
     }
