@@ -2,8 +2,8 @@ node_modules
 .DS_Store
 assetlist.json
 pagelist.json
-reader/epub_content/
 *.epub
 *.errors
 __MACOSX
 builds
+dist
