@@ -1,9 +1,11 @@
 import path from "path";
+import del from "del";
 import gulp from "gulp";
 import pug from "gulp-pug";
 import htmltidy from "gulp-htmltidy";
 import extReplace from "gulp-ext-replace";
-
+import filelist from "gulp-filelist";
+import fileAssets from "gulp-file-assets";
 import less from "gulp-less";
 import lessVariables from "gulp-add-less-variables";
 
@@ -34,12 +36,16 @@ import {
 const filter = require("gulp-filter");
 const purgecss = require("gulp-purgecss");
 
+export const cleanPages = () => del([`${contentDir}/xhtml/*.xhtml`]);
+
 export const pages = () => {
   const f = filter(["**", "!**/**/cover.pug"]);
   let currentPageNumber = 0;
   return (
     gulp
-      .src(["./src/pages/**/*.pug"], { base: "./src/pages/" })
+      .src(["./src/pages/**/*.pug"], {
+        base: "./src/pages/"
+      })
       /* filter out cover.pug for kindle */
       .pipe(gulpif(DEVICE === "kindle", f))
       .pipe(
@@ -91,7 +97,17 @@ export const pages = () => {
 };
 
 export const watchPug = () =>
-  gulp.watch("./src/**/*.pug", gulp.series(pages, packageEpub, reload));
+  gulp.watch(
+    "./src/**/*.pug",
+    { events: ["change", "add", "addDir"] },
+    gulp.series(pages, assetList, pageList, packageEpub, reload)
+  );
+export const watchPugUnlink = () =>
+  gulp.watch(
+    "./src/**/*.pug",
+    { events: ["unlink", "unlinkDir"] },
+    gulp.series(cleanPages, pages, assetList, pageList, packageEpub, reload)
+  );
 
 // sass to css with sourcemap and epub postcss
 
@@ -198,6 +214,24 @@ export const captions = () =>
     .src("./src/captions/**/*.{vtt,xml}")
     .pipe(gulp.dest(`${contentDir}/captions/`));
 
+const assetList = () =>
+  gulp
+    .src([`${contentDir}/xhtml/*.xhtml`], { base: `${contentDir}` })
+    .pipe(
+      fileAssets({
+        // manually add mp3, wav, mp4, webm to default extensions
+        exts: settings.exts.map(ext => ext.name)
+      })
+    )
+    .pipe(filelist("assetlist.json", { relative: true }))
+    .pipe(gulp.dest("./.tmp/"));
+
+const pageList = () =>
+  gulp
+    .src([`${contentDir}/xhtml/*.xhtml`])
+    .pipe(filelist("pagelist.json", { flatten: true, removeExtensions: true }))
+    .pipe(gulp.dest("./.tmp/"));
+
 export const assets = gulp.series(
   pages,
   cssModules,
@@ -207,5 +241,7 @@ export const assets = gulp.series(
   video,
   audio,
   captions,
-  scripts
+  scripts,
+  assetList,
+  pageList
 );
