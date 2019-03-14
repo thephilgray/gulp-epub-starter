@@ -6,6 +6,7 @@ import init from "./init";
 import { zipEpub } from "./zipEpub";
 import {
   watchPug,
+  watchPugUnlink,
   watchCss,
   watchCssModules,
   // watchJs,
@@ -18,11 +19,20 @@ const exec = require("child_process").exec;
 
 export const build = gulp.series(init, assets, packageEpub);
 
+export const watchDeletedFiles = () => gulp.src("./src").on("unlink", build);
+
 export const dev = gulp.series(
   build,
   server,
   // gulp.parallel(watchPug, watchCss, watchCssModules, watchJs, watchImages)
-  gulp.parallel(watchPug, watchCss, watchCssModules, watchImages)
+  gulp.parallel(
+    watchPug,
+    watchPugUnlink,
+    watchCss,
+    watchCssModules,
+    watchImages,
+    watchDeletedFiles
+  )
 );
 
 export const validate = done => {
