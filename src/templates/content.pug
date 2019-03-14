@@ -29,4 +29,6 @@
                     item(id=asset.id href=asset.href media-type=asset.mediaType)/
         spine(toc="ncx")
             each file in files
-                itemref(idref=file)/
+                if(file == "toc")
+                else
+                    itemref(idref=file)/
