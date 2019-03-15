@@ -12,17 +12,15 @@ import postcss from "gulp-postcss";
 import image from "gulp-image";
 import data from "gulp-data";
 import autoprefixer from "autoprefixer";
-// import sourcemaps from "gulp-sourcemaps";
 import gulpif from "gulp-if";
 import cssbeautify from "gulp-cssbeautify";
 import concat from "gulp-concat";
+import filter from "gulp-filter";
+import purgecss from "gulp-purgecss";
 
 import packageEpub from "./package";
 import { reload } from "./server";
-
 import settings from "./config";
-const filter = require("gulp-filter");
-const purgecss = require("gulp-purgecss");
 
 export const cleanPages = () =>
   del([`${settings.contentDirPath}/xhtml/*.xhtml`]);

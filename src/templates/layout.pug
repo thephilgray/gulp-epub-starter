@@ -2,11 +2,17 @@ include ./config
 block config
 include ./mixins/mixins.pug
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-html(xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops")
+html(xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang=language lang=language)
   head
     include ./partials/head
-  body(id=filename, xml:lang='en', lang='en', epub:type=epubTypes.join(' '))
-    .page
-      block content
-      include ./partials/footer
+  body(id=filename)
+    if roles && roles.length > 0 && labelledby
+      section.page(role=roles.join(' ') aria-labelledby=labelledby epub:type=epubTypes.join(' '))
+        block content
+    else if roles && roles.length > 0
+      section.page(role=roles.join(' ') epub:type=epubTypes.join(' '))
+        block content
+    else
+      section.page(epub:type=epubTypes.join(' '))
+        block content
     block scripts

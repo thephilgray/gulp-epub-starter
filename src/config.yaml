@@ -3,15 +3,12 @@ FIXED: false
 contentDirname: OEBPS
 coverImage:
   src: images/cover.jpg
-  alt: 'cover image'
-title:
-  main: Textbook
-  subtitle: Subtitle
+  alt: cover image
+title: Textbook
+subtitle: Subtitle
 creator:
   - role: author
     text: Lorem Creator
-  - role: editor
-    text: Ipsum Creator
 identifier:
   scheme: URN
   text: urn:uuidLOREMIPSUM
@@ -23,9 +20,9 @@ language: en-US
 ibooks:
   version: 1.3.4
 pages:
-  page01:
+  page01_chapter01:
     toc:
-      text: 'First Page'
+      text: Chapter 1
       level: 1
     properties:
       - scripted

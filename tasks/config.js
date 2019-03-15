@@ -25,28 +25,29 @@ try {
 // TODO: Include global stylesheet and script properties; these can be used to determine the path/name; if null, do not include on every page except where specified in `pages`
 
 const settings = {
-  name: "",
+  name: "TEXTBOOK",
   distPath: path.join(process.cwd(), "dist"),
   PRODUCTION: process.env.NODE_ENV === "production",
   DEVELOPMENT: process.env.NODE_ENV === "development",
   DEVICE: process.env.DEVICE || "ipad",
   FIXED: minimist(process.argv.slice(2)).fixed || false,
   contentDirname: "OEBPS",
-  title: {},
+  title: "Textbook",
+  subtitle: "Textbook",
   creator: [{ role: "author", text: "" }],
   date: dateFormat(new Date(), `YYYY-MM-DDThh:mm:ss`) + "Z",
-  author: "",
+  author: "Author",
   identifier: {
     scheme: "URN",
-    text: ""
+    text: "urn:uuidLOREMIPSUM"
   },
   language: "en",
-  type: "",
+  type: "Education",
   modified: dateFormat(new Date(), `YYYY-MM-DDThh:mm:ss`) + "Z",
-  publisher: "",
+  publisher: "Publisher",
   coverImage: {
     src: "images/cover.jpg",
-    alt: ""
+    alt: "cover image"
   },
   pages: {}, // TODO: Include stylesheets and scripts properties
   pageProperties: {},
