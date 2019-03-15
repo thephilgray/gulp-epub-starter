@@ -1,6 +1,6 @@
 {
   "name": "gulp-epub-starter",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "An opinionated static EPUB generator with Less and BrowserSync + Readium Cloud Reader for live reload development.",
   "scripts": {
     "dev": "NODE_ENV=development gulp --require @babel/register --gulpfile tasks",
