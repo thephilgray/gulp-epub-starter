@@ -38,7 +38,7 @@ export const dev = gulp.series(
 
 export const validate = done => {
   exec(
-    `java -jar bin/epubcheck-4.0.2/epubcheck.jar ./dist/${epubName} > ./dist/${epubName}.errors 2>&1`,
+    `java -jar bin/epubcheck-4.1.1/epubcheck.jar ./dist/${epubName} > ./dist/${epubName}.errors 2>&1`,
     function(err, stdout, stderr) {
       if (err) {
         console.log(stderr);
