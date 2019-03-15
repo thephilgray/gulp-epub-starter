@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-html(xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops")
-    head
-      meta(charset="utf-8")/
-      title= title.main
-    body
-        nav(id="toc" epub:type="toc")
-            h2 Table of Contents
-            ol.tocNav
-                each file in files
-                    if pages[file]
-                        li
-                            a(href=file + ".xhtml")= pages[file].toc.text
+extends layout
+append config
+    - var epubTypes = ['toc', 'frontmatter']
+    - var roles = ['doc-toc']
+    - var pageTitle = 'Table of Contents'
+block content
+    nav
+        h1= pageTitle
+        ol.tocNav
+            each file in files
+                if pages[file]
+                    li
+                        a(href=file + ".xhtml")= pages[file].toc.text
