@@ -7,7 +7,12 @@ block content
     nav
         h1= pageTitle
         ol.tocNav
-            each file in files
-                if pages[file]
+            if tocHeadings
+                each item in tocHeadings
                     li
-                        a(href=file + ".xhtml")= pages[file].toc.text
+                        a(href=tocPages[item.fileID] + '#' + item.id)=item.text
+            else
+                each file in files
+                    if pages[file]
+                        li
+                            a(href=file + ".xhtml")= pages[file].toc.text
