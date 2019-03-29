@@ -77,7 +77,7 @@
     "gulp-rename": "^1.4.0",
     "gulp-sourcemaps": "^2.6.5",
     "js-yaml": "^3.12.2",
-    "launch-epub": "git+https://github.com/thephilgray/launch-epub.git",
+    "launch-epub": "^1.1.2",
     "lodash": "^4.17.11",
     "merge-stream": "^1.0.1",
     "minimist": "^1.2.0",
