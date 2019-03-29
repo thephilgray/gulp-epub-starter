@@ -1,7 +1,6 @@
 import path from "path";
 import fs from "fs-extra";
 import gulp from "gulp";
-
 import rename from "gulp-rename";
 import pug from "gulp-pug";
 
@@ -37,8 +36,7 @@ const mapAssets = list => {
     };
   });
 };
-
-const toc = () =>
+const toc = async () =>
   gulp
     .src("./src/templates/toc.pug")
     .pipe(

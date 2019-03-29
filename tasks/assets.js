@@ -17,6 +17,8 @@ import cssbeautify from "gulp-cssbeautify";
 import concat from "gulp-concat";
 import filter from "gulp-filter";
 import purgecss from "gulp-purgecss";
+import through from "through2";
+import { getTocDataFromArrayOfHtmlPathsOrStrings } from "toc-generator";
 
 import packageEpub from "./package";
 import { reload } from "./server";
@@ -25,7 +27,22 @@ import settings from "./config";
 export const cleanPages = () =>
   del([`${settings.contentDirPath}/xhtml/*.xhtml`]);
 
-export const pages = () => {
+// the local data to pass into the pug compiler
+
+const pugOptions = {
+  doctype: "xhtml",
+  locals: {
+    ...settings,
+    viewport: settings.devices[settings.DEVICE].viewport,
+    fixed: settings.FIXED,
+    device: settings.DEVICE,
+    tocPages: [],
+    tocHeadings: []
+  }
+};
+
+// stored as a named function for reuse; it will get called twice
+const html = () => {
   const f = filter(["**", "!**/**/cover.pug"]);
   let currentPageNumber = 0;
   return (
@@ -41,33 +58,24 @@ export const pages = () => {
           pageNumber: ++currentPageNumber
         }))
       )
-      .pipe(
-        pug({
-          doctype: "xhtml",
-          locals: {
-            ...settings,
-            viewport: settings.devices[settings.DEVICE].viewport,
-            fixed: settings.FIXED,
-            device: settings.DEVICE
-          }
-        })
-      )
-      .pipe(
-        gulpif(
-          settings.DEVELOPMENT,
-          htmltidy({
-            doctype: "xhtml",
-            outputXhtml: "yes",
-            indent: "auto",
-            wrap: 120,
-            "wrap-attributes": false,
-            "drop-empty-elements": "no"
-          })
-        )
-      )
-      .pipe(
-        gulpif(
-          settings.PRODUCTION,
+      .pipe(pug(pugOptions))
+      .pipe(extReplace(".xhtml"))
+  );
+};
+
+const compileTemplatesWithDataFromHTML = strings =>
+  getTocDataFromArrayOfHtmlPathsOrStrings(strings) // parse the html to get the data
+    .then(data => {
+      // store the returned data locally
+      // TODO: fix node-toc-generator to correctly handle this case; page property is broken when dealing with an array of html strings
+      const dataWithUpdatedPages = data.map(heading => ({
+        ...heading,
+        page: pugOptions.locals.tocPages[heading.fileID]
+      }));
+      pugOptions.locals.tocHeadings = dataWithUpdatedPages;
+      // compile the templates again with the updated data
+      return html()
+        .pipe(
           htmltidy({
             inputXml: true,
             outputXhtml: true,
@@ -77,10 +85,36 @@ export const pages = () => {
             "drop-empty-elements": "no"
           })
         )
-      )
-      .pipe(extReplace(".xhtml"))
-      .pipe(gulp.dest(settings.contentDirPath + "/xhtml"))
+        .pipe(extReplace(".xhtml"))
+        .pipe(gulp.dest(settings.contentDirPath + "/xhtml"));
+    })
+    .catch(e => console.error(e));
+
+// the main function, receives all compiled pug in a stream and pushes the contents to `strings`
+// once the stream has ended and all the files have been pushed through, calls `compileTemplatesWithDataFromHTML` with the array of html strings
+
+const getHTMLFromTemplates = () => {
+  // just a local array to store strings of html pushed from the through2 stream
+  const strings = [];
+
+  return (
+    through
+      .obj((file, enc, cb) => {
+        // push the strings of html to an array
+        strings.push(file.contents.toString());
+        // push the filenames to another array; TODO: update the lib to handle buffers not strings and return the filenames from the api
+        console.log(path.basename(file.path));
+        pugOptions.locals.tocPages.push(path.basename(file.path));
+        // let through know that we're done with the current file
+        cb(null);
+      })
+      // ensure it's finished and all files have been processed before attempting to get the data from the html and recompile the templates
+      .on("end", () => compileTemplatesWithDataFromHTML(strings))
   );
+};
+
+export const pages = () => {
+  return html().pipe(getHTMLFromTemplates());
 };
 
 export const watchPug = () =>
