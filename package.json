@@ -84,6 +84,7 @@
     "mkdirp": "^0.5.1",
     "prettier": "^1.16.4",
     "regenerator-runtime": "^0.12.1",
+    "uuid": "^3.3.2",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   },
