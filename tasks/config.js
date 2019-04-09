@@ -3,7 +3,9 @@ import fs from "fs";
 import yaml from "js-yaml";
 import dateFormat from "date-fns/format";
 import minimist from "minimist";
+import uuidv5 from "uuid/v5";
 
+const IDENTIFIER_NAMESPACE = "30948b9b-43c7-4771-a267-dea119c6238b";
 /**
  *
  * TODO: Refactor as a class with getSettings and updateSettings methods, or following redux pattern;
@@ -98,11 +100,15 @@ const settings = {
 // allow user to set config.yaml with a path relative to the src root, but modify it relative to pages
 // settings.coverImage.src = `../${settings.coverImage.src}`;
 
-// TODO: finalize URN naming convention
-settings.identifier.text = `${settings.identifier.text}-${dateFormat(
-  settings.date.replace("Z", ""),
-  "YYYYMMDD-hhmm"
-)}`;
+// settings.identifier.text = `${settings.identifier.text}-${dateFormat(
+//   settings.date.replace("Z", ""),
+//   "YYYYMMDD-hhmm"
+// )}`;
+
+settings.identifier.text = uuidv5(
+  settings.identifier.text,
+  IDENTIFIER_NAMESPACE
+);
 
 // create pageProperties map from pages in userSettings
 settings.pageProperties = Object.keys(settings.pages).reduce((acc, curr) => {
@@ -117,7 +123,7 @@ settings.pageProperties = Object.keys(settings.pages).reduce((acc, curr) => {
 
 settings.epubName = `${settings.name}_${settings.DEVICE}${
   settings.PRODUCTION
-    ? "_" + dateFormat(settings.modified.replace("Z", ""), "YYYYMMDD-hhmm")
+    ? `_${dateFormat(settings.modified.replace("Z", ""), "YYYYMMDD-hhmm")}`
     : ""
 }.epub`;
 
