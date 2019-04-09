@@ -19,7 +19,7 @@ const IDENTIFIER_NAMESPACE = "30948b9b-43c7-4771-a267-dea119c6238b";
 let userSettings;
 
 try {
-  userSettings = yaml.safeLoad(fs.readFileSync("src/config.yaml", "utf8"));
+  userSettings = yaml.safeLoad(fs.readFileSync("src/metadata.yaml", "utf8"));
 } catch (e) {
   console.error(e);
 }
