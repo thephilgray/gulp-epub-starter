@@ -1,4 +1,4 @@
-import settings from "./config";
+import settings from "./settings";
 import LaunchEpub from "launch-epub";
 
 const { buildPath } = settings;

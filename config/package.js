@@ -5,7 +5,7 @@ import gulp from "gulp";
 import rename from "gulp-rename";
 import pug from "gulp-pug";
 
-import settings from "./config";
+import settings from "./settings";
 
 // map through the resulting assets list and use conditional logic to determine attrs
 // compute with a second function or perform in assetList task with gulp-if
@@ -48,7 +48,7 @@ const toc = () =>
         locals: {
           ...settings,
           files: fs.readJSONSync(
-            path.resolve(process.cwd(), ".tmp/pagelist.json")
+            path.resolve(process.cwd(), "config/.tmp/pagelist.json")
           )
         }
       })
@@ -70,7 +70,7 @@ const tocNcx = () => {
         locals: {
           ...settings,
           files: fs.readJSONSync(
-            path.resolve(process.cwd(), ".tmp/pagelist.json")
+            path.resolve(process.cwd(), "config/.tmp/pagelist.json")
           )
         }
       })
@@ -108,10 +108,12 @@ const generatePackageFile = () =>
         locals: {
           ...settings,
           assets: mapAssets(
-            fs.readJSONSync(path.resolve(process.cwd(), ".tmp/assetList.json"))
+            fs.readJSONSync(
+              path.resolve(process.cwd(), "config/.tmp/assetList.json")
+            )
           ),
           files: fs.readJSONSync(
-            path.resolve(process.cwd(), ".tmp/pagelist.json")
+            path.resolve(process.cwd(), "config/.tmp/pagelist.json")
           ),
           properties: settings.pageProperties,
           device: settings.DEVICE,

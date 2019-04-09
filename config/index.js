@@ -13,7 +13,7 @@ import {
   watchImages,
   assets
 } from "./assets";
-import settings from "./config";
+import settings from "./settings";
 const { epubName } = settings;
 
 const exec = require("child_process").exec;
@@ -38,7 +38,7 @@ export const dev = gulp.series(
 
 export const validate = done => {
   exec(
-    `java -jar bin/epubcheck-4.1.1/epubcheck.jar ./dist/${epubName} > ./dist/${epubName}.errors 2>&1`,
+    `java -jar config/epubcheck-4.1.1/epubcheck.jar ./dist/${epubName} > ./dist/${epubName}.errors 2>&1`,
     function(err, stdout, stderr) {
       if (err) {
         console.log(stderr);

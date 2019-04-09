@@ -20,7 +20,7 @@ import purgecss from "gulp-purgecss";
 
 import packageEpub from "./package";
 import { reload } from "./server";
-import settings from "./config";
+import settings from "./settings";
 
 export const cleanPages = () =>
   del([`${settings.contentDirPath}/xhtml/*.xhtml`]);
@@ -203,13 +203,13 @@ const assetList = () =>
       })
     )
     .pipe(filelist("assetlist.json", { relative: true }))
-    .pipe(gulp.dest("./.tmp/"));
+    .pipe(gulp.dest("config/.tmp/"));
 
 const pageList = () =>
   gulp
     .src([`${settings.contentDirPath}/xhtml/*.xhtml`])
     .pipe(filelist("pagelist.json", { flatten: true, removeExtensions: true }))
-    .pipe(gulp.dest("./.tmp/"));
+    .pipe(gulp.dest("config/.tmp/"));
 
 export const assets = gulp.series(
   pages,
