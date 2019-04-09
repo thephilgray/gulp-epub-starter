@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import mkdirp from "mkdirp";
-import settings from "./config";
+import settings from "./settings";
 import epubZip from "epub-zip";
 
 const { buildPath, epubName, distPath } = settings;

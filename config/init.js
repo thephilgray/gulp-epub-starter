@@ -3,7 +3,7 @@ import del from "del";
 import pug from "gulp-pug";
 import rename from "gulp-rename";
 
-import settings from "./config";
+import settings from "./settings";
 
 const { buildPath, contentDirPath, contentDirname } = settings;
 

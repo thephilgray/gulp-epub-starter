@@ -13,7 +13,7 @@ import {
   watchImages,
   assets
 } from "./assets";
-import settings from "./config";
+import settings from "./settings";
 const { epubName } = settings;
 
 const exec = require("child_process").exec;

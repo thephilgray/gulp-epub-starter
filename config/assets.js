@@ -20,7 +20,7 @@ import purgecss from "gulp-purgecss";
 
 import packageEpub from "./package";
 import { reload } from "./server";
-import settings from "./config";
+import settings from "./settings";
 
 export const cleanPages = () =>
   del([`${settings.contentDirPath}/xhtml/*.xhtml`]);

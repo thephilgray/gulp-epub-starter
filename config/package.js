@@ -5,7 +5,7 @@ import gulp from "gulp";
 import rename from "gulp-rename";
 import pug from "gulp-pug";
 
-import settings from "./config";
+import settings from "./settings";
 
 // map through the resulting assets list and use conditional logic to determine attrs
 // compute with a second function or perform in assetList task with gulp-if
