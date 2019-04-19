@@ -1,10 +1,9 @@
 extends layout
 append config
-    - var epubTypes = ['toc', 'frontmatter']
-    - var roles = ['doc-toc']
+    - var epubTypes = ['frontmatter']
     - var pageTitle = 'Table of Contents'
 block content
-    nav
+    nav(role='doc-toc', epub:type="toc")
         h1= pageTitle
         ol.tocNav
             each file in files
