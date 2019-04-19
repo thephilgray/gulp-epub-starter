@@ -20,9 +20,13 @@ language: en-US
 ibooks:
   version: 1.3.4
 pages:
+  cover:
+    toc:
+      text: Cover
+      level: 1
+    properties:
+      - svg
   page01_chapter01:
     toc:
       text: Chapter 1
       level: 1
-    properties:
-      - scripted
